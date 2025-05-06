@@ -8,4 +8,23 @@ spring:
   config:
     import: classpath:application-secret.yml
 
+springdoc:
+  swagger-ui:
+    path: /api/swagger
+    groups-order: DESC
+    tags-sorter: alpha
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+    doc-expansion: none
+  api-docs:
+    enabled: true
+  use-fqn: true
+  show-actuator: false
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  writer-with-default-pretty-printer: true
+  override-with-generic-response: false
+  paths-to-match:
+    - /**
 ...
