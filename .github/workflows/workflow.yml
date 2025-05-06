@@ -7,7 +7,7 @@ on:
     types: [ closed ]
 jobs:
   build:
-    if: github.event.pull_requst.merged == true
+    # if: github.event.pull_requst.merged == true
     runs-on: ubuntu-latest
 
     steps:
