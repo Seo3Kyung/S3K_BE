@@ -1,4 +1,4 @@
-package com.s3k.backend.com;
+package com.s3k.backend.global;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

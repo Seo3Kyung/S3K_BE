@@ -1,4 +1,4 @@
-package com.s3k.backend.com;
+package com.s3k.backend.global;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
