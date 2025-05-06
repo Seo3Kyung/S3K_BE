@@ -1,0 +1,47 @@
+name: Deploy to EC2
+on:
+  push:
+    branches: [ feature/* ]
+  pull_request:
+    branches: [ main ]
+    types: [ closed ]
+jobs:
+  build:
+    if: github.event.pull_requst.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      if: ${{ github.event_name == 'push' }}
+
+    - name: Build with Gradle
+      run: ./gradlew build -x test
+      if: ${{ github.event_name == 'push' }}
+
+    - name: Notify Discord on build success
+      uses: appleboy/discord-action@v1.2.0
+      with:
+        webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
+        webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+        color: "#7FFF00"
+        message: ":white_check_mark: 빌드 성공: ${{ github.event.repository.full_name }} - ${{ github.sha }}"
+      if: success()
+
+    - name: Notify Discord on build failure
+      uses: appleboy/discord-action@v1.2.0
+      with:
+        webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
+        webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+        color: "#00FF00"
+        message: ":x: 빌드 실패: ${{github.event.repository.full_name}} - ${{github.sha}}"
+      if: failure()
