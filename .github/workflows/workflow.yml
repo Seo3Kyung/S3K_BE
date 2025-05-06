@@ -3,7 +3,7 @@ on:
   push:
     branches: [ feature/* ]
   pull_request:
-    branches: [ main ]
+    branches: [ prod ]
     types: [ closed ]
 
 jobs:
