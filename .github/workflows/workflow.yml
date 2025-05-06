@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-#    if: github.event.pull_requst.merged == true
+    if: ${{ github.event_name == 'push' || github.event.pull_request.merged == true}}
     runs-on: ubuntu-latest
     environment: prod
 
@@ -24,11 +24,9 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-      if: ${{ github.event_name == 'push' }}
 
     - name: Build with Gradle
-      run: ./gradlew build -x test
-      if: ${{ github.event_name == 'push' }}
+      run: ./gradlew clean build -x test
 
     - name: Notify Discord on build success
       uses: appleboy/discord-action@v1.2.0
