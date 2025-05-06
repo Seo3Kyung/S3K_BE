@@ -1,6 +1,11 @@
+---
 server:
   port: 9999
 
 spring:
-    application:
-      name: backend
+  profiles:
+    active: local
+  config:
+    import: classpath:application-secret.yml
+
+...
