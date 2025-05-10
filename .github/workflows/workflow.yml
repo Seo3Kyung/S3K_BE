@@ -7,7 +7,7 @@ on:
     types: [ closed ]
 
 env:
-  DOCKER_IMAGE_NAME: s3k/prod:latest
+  DOCKER_IMAGE_NAME: s3k-prod:latest
 
 jobs:
   build:
