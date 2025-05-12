@@ -3,17 +3,17 @@ on:
   push:
     branches: [ feature/* ]
   pull_request:
-    branches: [ prod ]
+    branches: [ dev ]
     types: [ closed ]
 
 env:
-  DOCKER_IMAGE_NAME: kanew0910/s3k-prod:latest
+  DOCKER_IMAGE_NAME: kanew0910/s3k-dev:latest
 
 jobs:
   build:
     if: ${{ github.event_name == 'push' || github.event.pull_request.merged == true}}
     runs-on: ubuntu-latest
-    environment: prod
+    environment: dev
 
     steps:
     - name: Checkout Code
@@ -56,9 +56,10 @@ jobs:
       if: failure()
 
   docker:
+    if: github.event.pull_request.merged == true
     needs: build
     runs-on: ubuntu-latest
-    environment: prod
+    environment: dev
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
