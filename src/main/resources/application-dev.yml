@@ -1,0 +1,11 @@
+---
+spring:
+  application:
+    name: backend
+  datasource:
+    hikari:
+      driver-class-name: org.postgresql.ds.PGSimpleDataSource
+      jdbc-url:
+      username: {dev.datasource.usernames}
+      password: {dev.datasource.password}
+...
