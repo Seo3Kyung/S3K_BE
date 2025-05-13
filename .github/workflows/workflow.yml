@@ -124,7 +124,7 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/s3k-dev:latest
             docker stop ${{ secrets.EC2_CONTAINER_NAME }} || true
             docker rm ${{ secrets.EC2_CONTAINER_NAME }} || true
-            docker run -d --name ${{ secrets.EC2_CONTAINER_NAME }} -p ${{ secrets.EC2_PORT_FORWARDING }} ${{ secrets.DOCKERHUB_USERNAME }}/s3k-dev:latest
+            docker run -d --name ${{ secrets.EC2_CONTAINER_NAME }} -p ${{ secrets.EC2_PORT_FORWARDING }} -e SPRING_PROFILES_ACTIVE=dev ${{ secrets.DOCKERHUB_USERNAME }}/s3k-dev:latest
             docker image prune -af
 
       - name: Notify Discord on deploy success
