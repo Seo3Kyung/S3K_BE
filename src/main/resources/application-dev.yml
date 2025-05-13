@@ -3,9 +3,8 @@ spring:
   application:
     name: backend
   datasource:
-    hikari:
-      driver-class-name: org.postgresql.ds.PGSimpleDataSource
-      jdbc-url:
-      username: {dev.datasource.usernames}
-      password: {dev.datasource.password}
+    url: jdbc:postgresql://postgres:5432/s3k
+    driver-class-name: org.postgresql.Driver
+    username: {dev.datasource.usernames}
+    password: {dev.datasource.password}
 ...
