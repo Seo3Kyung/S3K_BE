@@ -5,6 +5,12 @@ spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/s3k
     driver-class-name: org.postgresql.Driver
-    username: {dev.datasource.usernames}
-    password: {dev.datasource.password}
+    username: { dev.datasource.usernames }
+    password: { dev.datasource.password }
+
+logging:
+  level:
+    root: info
+  discord:
+    webhook-url: { dev.discord.webhook-url }
 ...
