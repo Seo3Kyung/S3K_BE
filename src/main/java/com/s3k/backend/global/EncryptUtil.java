@@ -2,7 +2,7 @@ package com.s3k.backend.global;
 
 public class EncryptUtil {
 
-  private static final Long SERIAL_KEY = 0x12565A652F7460CBL;
+  private static final Long SERIAL_KEY = 0x73656F336B79756EL; // seo3kyung 변환
 
   public static Long encodeId(String id) {
     return encodeId(Long.parseLong(id));
