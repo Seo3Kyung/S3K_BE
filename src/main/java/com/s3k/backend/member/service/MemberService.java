@@ -48,7 +48,7 @@ public class MemberService {
     LocalDateTime currentDateTime = LocalDateTime.now();
     Member insertMember = new Member(
         null,
-        Long.parseLong(request.snsId()),
+        request.snsId(),
         Sns.valueOf(sns).getValue(),
         request.nickname(),
         request.tos(),

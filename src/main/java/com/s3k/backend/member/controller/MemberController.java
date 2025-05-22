@@ -43,6 +43,6 @@ public class MemberController {
       @RequestBody MemberSignupDto.Request request
   ) {
     // TODO : 예외처리 공통화 처리 후 수정.
-    return memberService.signup(sns, request);
+    return memberService.signup(sns.toUpperCase(), request);
   }
 }

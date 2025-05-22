@@ -7,7 +7,7 @@ public class MemberSignupDto {
 
   public record Request(
       @JsonDeserialize(using = EncodedIdDeserializer.class)
-      String snsId,
+      Long snsId,
       String nickname,
       boolean tos,
       boolean privacyPolicy
