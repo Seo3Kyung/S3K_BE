@@ -1,17 +1,15 @@
 package com.s3k.backend.member.entity;
 
-import com.s3k.backend.member.enums.Role;
-import com.s3k.backend.member.enums.Sns;
 import java.time.LocalDateTime;
-import jdk.jshell.Snippet.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class Member {
+
   private Long id; // 서비스 회원 ID
-  private String snsId; // SNS 고유 식별 ID
+  private Long snsId; // SNS 고유 식별 ID
   private int sns; // SNS 종류
   private String nickname; // 서비스 회원 닉네임
 //  private String memberId; - snsId로 대체
