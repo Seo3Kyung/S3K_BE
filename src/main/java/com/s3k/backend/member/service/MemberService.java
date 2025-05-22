@@ -1,5 +1,6 @@
 package com.s3k.backend.member.service;
 
+import com.s3k.backend.global.EncryptUtil;
 import com.s3k.backend.member.dto.MemberDefaultDto;
 import com.s3k.backend.member.dto.MemberSigninDto;
 import com.s3k.backend.member.dto.MemberSignupDto.Request;
@@ -35,7 +36,7 @@ public class MemberService {
     // TODO : 예외처리 공통화 처리 후 수정.
     if (member == null) {
       throw new RuntimeException(
-          "[UNAUTHORIZED] 가입된 회원이 아닙니다.");
+          "[UNAUTHORIZED] 가입된 회원이 아닙니다. SNS_ID : " + EncryptUtil.encodeId(snsId));
     }
     return memberConverter.convertResponse(member);
   }
