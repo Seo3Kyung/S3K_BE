@@ -84,4 +84,15 @@ public class MemberService {
 
     return memberConverter.convertResponse(newMember);
   }
+
+  public Member getMemberDetailBySnsId(Long snsId) {
+    Member member = memberMapper.getMemberDetailBySnsId(snsId);
+
+    if (ObjectUtils.isEmpty(member)) {
+      throw new RuntimeException(
+          "[NOT_FOUND] 회원 정보가 존재하지 않습니다. MEMBER_ID : " + EncryptUtil.encodeId(snsId));
+    }
+
+    return member;
+  }
 }

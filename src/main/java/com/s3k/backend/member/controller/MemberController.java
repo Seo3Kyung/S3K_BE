@@ -29,6 +29,11 @@ public class MemberController {
     return "에러";
   }
 
+  @GetMapping("/authTest")
+  public String authTest() {
+    return "인증 테스트 성공";
+  }
+
   @PostMapping("/sign-in")
   public MemberDefaultDto.Response signIn(
       @RequestBody MemberSigninDto.Request request

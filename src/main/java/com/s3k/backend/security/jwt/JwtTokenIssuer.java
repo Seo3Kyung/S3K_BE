@@ -29,7 +29,7 @@ public class JwtTokenIssuer {
         .setHeader(createHeader())
         .setClaims(createClaims(snsId))
         .setSubject(ACCESS_TOKEN_SUBJECT)
-        .setExpiration(createAccessTokenExpiredDate(6, ChronoUnit.HOURS))
+        .setExpiration(createAccessTokenExpiredDate(30, ChronoUnit.MINUTES))
         .signWith(createSigningKey(), SignatureAlgorithm.HS256);
     return jwtBuild.compact();
   }
@@ -52,8 +52,8 @@ public class JwtTokenIssuer {
   /**
    * 지정된 단위(amount, unit)로 만료 일시 계산
    *
-   * @param amount 더할 양
-   * @param unit   ChronoUnit (HOURS, DAYS 등)
+   * @param amount 필요한 시간 또는 날짜의 양
+   * @param unit   ChronoUnit (HOURS, DAYS, MINUTES 등)
    * @return 만료일시
    */
   private Date createAccessTokenExpiredDate(long amount, ChronoUnit unit) {
