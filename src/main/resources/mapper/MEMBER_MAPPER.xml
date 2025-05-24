@@ -1,13 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.s3k.backend.member.mapper.MemberMapper">
+  <insert id="insertPendingMember" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO MEMBER
+    (
+      sns_id,
+      sns,
+      role,
+      status,
+      created_at
+    )
+    VALUES
+    (
+      #{snsId},
+      #{sns},
+      #{role},
+      #{status},
+      #{createdAt}
+    )
+  </insert>
+
   <insert id="createMember" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO member (sns_id, sns, nickname, tos, privacy_policy, agree_at, role, status,
-    created_at, updated_at)
-    VALUES(#{snsId},#{sns}, #{nickname}, #{tos}, #{privacyPolicy}, #{agreeAt}, #{role}, #{status},
-    #{createdAt}, #{updatedAt})
+    INSERT INTO member
+    (
+      sns_id,
+      sns,
+      nickname,
+      tos,
+      privacy_policy,
+      agree_at,
+      role,
+      status,
+      created_at,
+      updated_at
+    )
+    VALUES
+    (
+      #{snsId},
+      #{sns},
+      #{nickname},
+      #{tos},
+      #{privacyPolicy},
+      #{agreeAt},
+      #{role},
+      #{status},
+      #{createdAt},
+      #{updatedAt}
+    )
   </insert>
   <select id="getMemberDetail" resultType="com.s3k.backend.member.entity.Member">
     SELECT
@@ -24,19 +65,20 @@
     updated_at
     FROM member WHERE id = #{memberId}
   </select>
-  <select id="getMemberDetailBySnsId" resultType="com.s3k.backend.member.entity.Member">
+  <select id="getMemberDetailBySnsId" parameterType="java.lang.Long" resultType="com.s3k.backend.member.entity.Member">
     SELECT
-    id,
-    sns_id,
-    sns,
-    nickname,
-    tos,
-    privacy_policy,
-    agree_at,
-    role,
-    status,
-    created_at,
-    updated_at
-    FROM member WHERE sns_id = #{snsId}
+      id,
+      sns_id,
+      sns,
+      nickname,
+      tos,
+      privacy_policy,
+      agree_at,
+      role,
+      status,
+      created_at,
+      updated_at
+    FROM member
+    WHERE sns_id = #{snsId}
   </select>
 </mapper>

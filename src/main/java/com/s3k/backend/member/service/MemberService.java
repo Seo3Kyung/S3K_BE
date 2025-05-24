@@ -15,6 +15,8 @@ import com.s3k.backend.member.service.inner.MemberConverter;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,22 @@ public class MemberService {
   private final KakaoProvider kakaoProvider;
   private final MemberConverter memberConverter;
   private final MemberMapper memberMapper;
+
+  @Transactional
+  public MemberDefaultDto.Response createOrGetPendingMember(Long snsId, Sns sns) {
+    Member member = memberMapper.getMemberDetailBySnsId(snsId);
+
+    if (ObjectUtils.isEmpty(member)) {
+      LocalDateTime registerTime = LocalDateTime.now();
+
+      Member pendingMember = Member.createPendingMember(snsId, sns, registerTime);
+
+      memberMapper.insertPendingMember(pendingMember);
+      member = memberMapper.getMemberDetailBySnsId(snsId);
+    }
+
+    return memberConverter.convertResponse(member);
+  }
 
   public MemberDefaultDto.Response signin(MemberSigninDto.Request request) {
 

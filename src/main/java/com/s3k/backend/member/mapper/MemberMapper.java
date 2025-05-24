@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MemberMapper {
 
+  void insertPendingMember(Member pendingMember);
+
   void createMember(Member parameter);
 
   Member getMemberDetail(Long memberId);

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "kakaoFeign", url = "${kakao.get-token-url}")
 public interface KakaoFeign {
 
-  @GetMapping
+  @GetMapping(value = "/oauth/token")
   KakaoTokenDto getToken(
       @RequestParam("code") String code,
       @RequestParam("client_id") String clientId,

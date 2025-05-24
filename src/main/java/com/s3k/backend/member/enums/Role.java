@@ -9,7 +9,8 @@ import lombok.RequiredArgsConstructor;
 public enum Role {
   UNKNOWN(0, "미정의"),
   MEMBER(1, "일반 유저"),
-  ADMIN(2, "관리자");
+  ADMIN(2, "관리자"),
+  CHECK(3, "인증 대기");
   private final int value;
   private final String desc;
 

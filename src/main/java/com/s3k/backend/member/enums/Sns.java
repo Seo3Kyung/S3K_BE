@@ -23,4 +23,14 @@ public enum Sns {
     }
     return Sns.UNKNOWN;
   }
+
+  public static Sns fromRegistrationId(String regId) {
+    for (Sns sns : values()) {
+      String socialName = sns.name().toLowerCase();
+      if (regId.equals(socialName)) {
+        return sns;
+      }
+    }
+    throw new IllegalArgumentException("지원하지 않는 소셜입니다.");
+  }
 }
