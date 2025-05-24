@@ -6,9 +6,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
+@Slf4j
 public class OAuth2LoginFailureHandler implements AuthenticationFailureHandler {
 
   @Override
@@ -16,6 +18,7 @@ public class OAuth2LoginFailureHandler implements AuthenticationFailureHandler {
       AuthenticationException exception) throws IOException, ServletException {
 
     String errorMessage = URLEncoder.encode(exception.getMessage(), StandardCharsets.UTF_8);
+    log.error("OAuth2 로그인 실패, 원인 : {}", errorMessage);
     response.sendRedirect(request.getContextPath() + "/home=" + errorMessage);
   }
 }

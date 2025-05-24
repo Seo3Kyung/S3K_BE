@@ -2,6 +2,7 @@ package com.s3k.backend.security.config;
 
 import com.s3k.backend.security.handler.OAuth2LoginFailureHandler;
 import com.s3k.backend.security.handler.OAuth2LoginSuccessHandler;
+import com.s3k.backend.security.jwt.JwtTokenIssuer;
 import com.s3k.backend.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 public class SecurityConfig {
 
   private final CustomOAuth2UserService customOAuth2UserService;
+  private final JwtTokenIssuer jwtTokenIssuer;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,7 +39,7 @@ public class SecurityConfig {
 
         .exceptionHandling(ex -> ex
             .authenticationEntryPoint(
-                new LoginUrlAuthenticationEntryPoint("http://localhost:3000/login")
+                new LoginUrlAuthenticationEntryPoint("http://localhost:3000/errorPage")
             ))
 
         .oauth2Login(oauth -> oauth
@@ -52,7 +54,7 @@ public class SecurityConfig {
 
   @Bean
   public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler() {
-    return new OAuth2LoginSuccessHandler();
+    return new OAuth2LoginSuccessHandler(jwtTokenIssuer);
   }
 
   @Bean

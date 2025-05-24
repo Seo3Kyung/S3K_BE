@@ -7,25 +7,24 @@ import com.s3k.backend.member.service.inner.KakaoProvider;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements
     OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
+  private final static String KAKAO = "kakao";
   private final static String GOOGLE = "google";
   private final static String NAVER = "naver";
-  private final static String KAKAO = "kakao";
 
   private final MemberService memberService;
   private final KakaoProvider kakaoProvider;
@@ -46,12 +45,18 @@ public class CustomOAuth2UserService implements
       snsId = (Long) userInfo.get("id");
     }
 
-    MemberDefaultDto.Response member = memberService.createOrGetPendingMember(snsId, sns);
+    try {
+      MemberDefaultDto.Response member = memberService.createOrGetPendingMember(snsId, sns);
+      List<GrantedAuthority> authorities = List.of(
+          new SimpleGrantedAuthority(member.role().name()));
 
-    List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(member.role().name()));
+      Map<String, Object> attr = Map.of("snsId", snsId);
 
-    Map<String, Object> attr = Map.of("snsId", snsId);
-
-    return new DefaultOAuth2User(authorities, attr, "snsId");
+      return new DefaultOAuth2User(authorities, attr, "snsId");
+    } catch (Exception e) {
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error("SIGN_UP_FAILED"), "회원 가입 실패", e
+      );
+    }
   }
 }
