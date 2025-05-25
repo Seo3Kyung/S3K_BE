@@ -38,11 +38,9 @@ public class CustomOAuth2UserService implements
     Sns sns = Sns.fromRegistrationId(registrationId);
 
     if (KAKAO.equals(registrationId)) {
-      String authCode = request.getAccessToken().getTokenValue();
+      String idToken = request.getAdditionalParameters().get("id_token").toString();
 
-      Map<String, Object> userInfo = kakaoProvider.getUserInfo(authCode);
-
-      snsId = (Long) userInfo.get("id");
+      snsId = kakaoProvider.getSnsId(idToken);
     }
 
     try {
