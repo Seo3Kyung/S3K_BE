@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 @Slf4j
 public class MemberController {
@@ -25,7 +25,6 @@ public class MemberController {
   @GetMapping("/test")
   public String test() {
 //    log.error("디스코드 에러 테스트");
-//    return new Member("디스코드", 1);
     return "에러";
   }
 

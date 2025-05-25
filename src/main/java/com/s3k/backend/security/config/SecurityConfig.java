@@ -3,6 +3,7 @@ package com.s3k.backend.security.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.s3k.backend.member.service.MemberService;
 import com.s3k.backend.security.filter.CustomJwtAuthenticationFilter;
+import com.s3k.backend.security.handler.CustomAuthenticationEntryPoint;
 import com.s3k.backend.security.handler.OAuth2LoginFailureHandler;
 import com.s3k.backend.security.handler.OAuth2LoginSuccessHandler;
 import com.s3k.backend.security.jwt.JwtTokenIssuer;
@@ -44,19 +45,25 @@ public class SecurityConfig {
         .logout(AbstractHttpConfigurer::disable)
         .sessionManagement(it -> it.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/oauth2/authorization/**", "/login/oauth2/code/**",
-                "/members/sign-up/**")
-            .permitAll()
-            .anyRequest().authenticated()
-        )
-
         .oauth2Login(oauth -> oauth
             .authorizationEndpoint(a -> a.baseUri("/oauth2/authorization"))
             .redirectionEndpoint(r -> r.baseUri("/login/oauth2/code/*"))
             .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
             .successHandler(oAuth2LoginSuccessHandler())
             .failureHandler(oAuth2LoginFailureHandler())
+        )
+
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/swagger", "/api/swagger-ui/**", "/v3/api-docs/**", "/webjars/**")
+            .permitAll()
+            .requestMatchers("/oauth2/authorization/**", "/login/oauth2/code/**",
+                "/api/members/sign-up/**")
+            .permitAll()
+            .anyRequest().authenticated()
+        )
+
+        .exceptionHandling(ex ->
+            ex.authenticationEntryPoint(customAuthenticationEntryPoint())
         )
 
         .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -90,5 +97,10 @@ public class SecurityConfig {
   @Bean
   public CustomJwtAuthenticationFilter jwtAuthenticationFilter() {
     return new CustomJwtAuthenticationFilter(jwtTokenValidator, memberService, objectMapper);
+  }
+
+  @Bean
+  public CustomAuthenticationEntryPoint customAuthenticationEntryPoint() {
+    return new CustomAuthenticationEntryPoint(objectMapper);
   }
 }
