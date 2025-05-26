@@ -9,8 +9,10 @@ import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 public class OAuth2LoginFailureHandler implements AuthenticationFailureHandler {
 
   @Override

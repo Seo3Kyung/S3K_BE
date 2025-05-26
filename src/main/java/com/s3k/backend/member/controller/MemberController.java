@@ -4,9 +4,11 @@ package com.s3k.backend.member.controller;
 import com.s3k.backend.member.dto.MemberDefaultDto;
 import com.s3k.backend.member.dto.MemberSigninDto;
 import com.s3k.backend.member.dto.MemberSignupDto;
+import com.s3k.backend.member.entity.Member;
 import com.s3k.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,5 +50,12 @@ public class MemberController {
   ) {
     // TODO : 예외처리 공통화 처리 후 수정.
     return memberService.signup(sns.toUpperCase(), request);
+  }
+
+  @PostMapping("/sign-up")
+  public String signUp(@RequestBody MemberSignupDto.Request request,
+      @AuthenticationPrincipal Member member) {
+    Long snsId = member.getSnsId();
+    return "회원가입 API는 SNS를 통해서만 가능합니다.";
   }
 }

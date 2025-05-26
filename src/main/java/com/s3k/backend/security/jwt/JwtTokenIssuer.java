@@ -24,12 +24,12 @@ public class JwtTokenIssuer {
 
   public static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
 
-  public String createAccessToken(Long snsId) {
+  public String createAccessToken(Long snsId, Long limitTime, ChronoUnit unit) {
     JwtBuilder jwtBuild = Jwts.builder()
         .setHeader(createHeader())
         .setClaims(createClaims(snsId))
         .setSubject(ACCESS_TOKEN_SUBJECT)
-        .setExpiration(createAccessTokenExpiredDate(30, ChronoUnit.MINUTES))
+        .setExpiration(createAccessTokenExpiredDate(limitTime, unit))
         .signWith(createSigningKey(), SignatureAlgorithm.HS256);
     return jwtBuild.compact();
   }
@@ -52,13 +52,13 @@ public class JwtTokenIssuer {
   /**
    * 지정된 단위(amount, unit)로 만료 일시 계산
    *
-   * @param amount 필요한 시간 또는 날짜의 양
-   * @param unit   ChronoUnit (HOURS, DAYS, MINUTES 등)
+   * @param limitTime 필요한 시간 또는 날짜의 양
+   * @param unit      ChronoUnit (HOURS, DAYS, MINUTES 등)
    * @return 만료일시
    */
-  private Date createAccessTokenExpiredDate(long amount, ChronoUnit unit) {
+  private Date createAccessTokenExpiredDate(long limitTime, ChronoUnit unit) {
     Instant now = Instant.now();
-    Instant expireTime = now.plus(amount, unit);
+    Instant expireTime = now.plus(limitTime, unit);
     return Date.from(expireTime);
   }
 

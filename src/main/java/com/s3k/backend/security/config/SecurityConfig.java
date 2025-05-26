@@ -1,13 +1,10 @@
 package com.s3k.backend.security.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.s3k.backend.member.service.MemberService;
 import com.s3k.backend.security.filter.CustomJwtAuthenticationFilter;
+import com.s3k.backend.security.handler.CustomAccessDeniedHandler;
 import com.s3k.backend.security.handler.CustomAuthenticationEntryPoint;
 import com.s3k.backend.security.handler.OAuth2LoginFailureHandler;
 import com.s3k.backend.security.handler.OAuth2LoginSuccessHandler;
-import com.s3k.backend.security.jwt.JwtTokenIssuer;
-import com.s3k.backend.security.jwt.JwtTokenValidator;
 import com.s3k.backend.security.service.CustomOAuth2UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +26,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
   private final CustomOAuth2UserService customOAuth2UserService;
-  private final MemberService memberService;
-  private final JwtTokenIssuer jwtTokenIssuer;
-  private final JwtTokenValidator jwtTokenValidator;
-  private final ObjectMapper objectMapper;
+  private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+  private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+  private final CustomJwtAuthenticationFilter customJwtAuthenticationFilter;
+  private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+  private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http)
@@ -49,24 +47,26 @@ public class SecurityConfig {
             .authorizationEndpoint(a -> a.baseUri("/oauth2/authorization"))
             .redirectionEndpoint(r -> r.baseUri("/login/oauth2/code/*"))
             .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
-            .successHandler(oAuth2LoginSuccessHandler())
-            .failureHandler(oAuth2LoginFailureHandler())
+            .successHandler(oAuth2LoginSuccessHandler)
+            .failureHandler(oAuth2LoginFailureHandler)
         )
 
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/swagger", "/api/swagger-ui/**", "/v3/api-docs/**", "/webjars/**")
             .permitAll()
-            .requestMatchers("/oauth2/authorization/**", "/login/oauth2/code/**",
-                "/api/members/sign-up/**")
+            .requestMatchers("/api/members/sign-up").hasAuthority("CHECK")
+            .requestMatchers("/oauth2/authorization/**", "/login/oauth2/code/**"
+            )
             .permitAll()
             .anyRequest().authenticated()
         )
 
-        .exceptionHandling(ex ->
-            ex.authenticationEntryPoint(customAuthenticationEntryPoint())
-        )
+        .exceptionHandling(ex -> {
+          ex.authenticationEntryPoint(customAuthenticationEntryPoint);
+          ex.accessDeniedHandler(customAccessDeniedHandler);
+        })
 
-        .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(customJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
   }
 
@@ -82,25 +82,5 @@ public class SecurityConfig {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
-  }
-
-  @Bean
-  public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler() {
-    return new OAuth2LoginSuccessHandler(jwtTokenIssuer);
-  }
-
-  @Bean
-  public OAuth2LoginFailureHandler oAuth2LoginFailureHandler() {
-    return new OAuth2LoginFailureHandler();
-  }
-
-  @Bean
-  public CustomJwtAuthenticationFilter jwtAuthenticationFilter() {
-    return new CustomJwtAuthenticationFilter(jwtTokenValidator, memberService, objectMapper);
-  }
-
-  @Bean
-  public CustomAuthenticationEntryPoint customAuthenticationEntryPoint() {
-    return new CustomAuthenticationEntryPoint(objectMapper);
   }
 }

@@ -22,15 +22,30 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtTokenValidator jwtTokenValidator;
   private final MemberService memberService;
   private final ObjectMapper objectMapper;
+
+  private static final List<String> EXCLUDED_PATHS = List.of(
+      "/api/swagger",
+      "/api/swagger-ui",
+      "/v3/api-docs",
+      "/webjars"
+  );
+
+  @Override
+  protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    String path = request.getRequestURI();
+    return EXCLUDED_PATHS.stream().anyMatch(path::startsWith);
+  }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -49,11 +64,11 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
 
       filterChain.doFilter(request, response);
     } catch (ExpiredJwtException e) {
-      sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "토큰이 만료되었습니다", e);
+      sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "[토큰 만료] ", e);
     } catch (JwtException e) {
-      sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "토큰에 오류가 발생하였습니다", e);
+      sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "[토큰 오류] ", e);
     } catch (Exception e) {
-      sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "서버 인증 처리 중 오류", e);
+      sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "[서버 오류] ", e);
     }
   }
 
