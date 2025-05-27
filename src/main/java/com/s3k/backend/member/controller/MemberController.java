@@ -2,7 +2,6 @@ package com.s3k.backend.member.controller;
 
 
 import com.s3k.backend.member.dto.MemberDefaultDto;
-import com.s3k.backend.member.dto.MemberSigninDto;
 import com.s3k.backend.member.dto.MemberSignupDto;
 import com.s3k.backend.member.entity.Member;
 import com.s3k.backend.member.service.MemberService;
@@ -35,14 +34,6 @@ public class MemberController {
     return "인증 테스트 성공";
   }
 
-  @PostMapping("/sign-in")
-  public MemberDefaultDto.Response signIn(
-      @RequestBody MemberSigninDto.Request request
-  ) {
-    // TODO : 예외처리 공통화 처리 후 수정.
-    return memberService.signin(request);
-  }
-
   @PostMapping("/sign-up/{sns}")
   public MemberDefaultDto.Response signUp(
       @PathVariable String sns,
@@ -52,10 +43,10 @@ public class MemberController {
     return memberService.signup(sns.toUpperCase(), request);
   }
 
-  @PostMapping("/sign-up")
+  @PostMapping("/test/sign-up")
   public String signUp(@RequestBody MemberSignupDto.Request request,
       @AuthenticationPrincipal Member member) {
-    Long snsId = member.getSnsId();
+    String snsId = member.getSnsId();
     return "회원가입 API는 SNS를 통해서만 가능합니다.";
   }
 }

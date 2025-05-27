@@ -13,7 +13,7 @@ public class MemberDefaultDto {
       @JsonSerialize(using = EncodedIdSerializer.class)
       Long memberId,
       @JsonSerialize(using = EncodedIdSerializer.class)
-      Long snsId,
+      String snsId,
       Sns sns,
       String nickname,
       boolean tos,

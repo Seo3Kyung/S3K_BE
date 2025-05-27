@@ -2,9 +2,7 @@ package com.s3k.backend.member.service;
 
 import com.s3k.backend.global.EncryptUtil;
 import com.s3k.backend.member.dto.MemberDefaultDto;
-import com.s3k.backend.member.dto.MemberSigninDto;
 import com.s3k.backend.member.dto.MemberSignupDto.Request;
-import com.s3k.backend.member.dto.feign.KakaoTokenDto;
 import com.s3k.backend.member.entity.Member;
 import com.s3k.backend.member.enums.Role;
 import com.s3k.backend.member.enums.Sns;
@@ -26,38 +24,33 @@ public class MemberService {
   private final MemberConverter memberConverter;
   private final MemberMapper memberMapper;
 
+  public boolean existsMemberBySnsId(String snsId) {
+    return memberMapper.existsMemberBySnsId(snsId);
+  }
+
   @Transactional
-  public MemberDefaultDto.Response createOrGetPendingMember(Long snsId, Sns sns) {
-    Member member = memberMapper.getMemberDetailBySnsId(snsId);
-
-    if (ObjectUtils.isEmpty(member)) {
-      LocalDateTime registerTime = LocalDateTime.now();
-
-      Member pendingMember = Member.createPendingMember(snsId, sns, registerTime);
-
-      memberMapper.insertPendingMember(pendingMember);
-      member = memberMapper.getMemberDetailBySnsId(snsId);
-    }
-
-    return memberConverter.convertResponse(member);
+  public void createPendingMember(String snsId, String snsName) {
+    Sns sns = Sns.fromRegistrationId(snsName);
+    Member pendingMember = Member.createPendingMember(snsId, sns);
+    memberMapper.insertPendingMember(pendingMember);
   }
 
-  public MemberDefaultDto.Response signin(MemberSigninDto.Request request) {
-
-    KakaoTokenDto tokenInfo = kakaoProvider.getTokenInfo(request.authCode());
-    // TODO : 예외처리 공통화 처리 후 수정.
-    if (tokenInfo == null) {
-      throw new RuntimeException("[UNAUTHORIZED] 소셜 로그인 실패. 관리자 문의 바람");
-    }
-    Long snsId = kakaoProvider.getSnsId(tokenInfo.getIdToken());
-    Member member = memberMapper.getMemberDetailBySnsId(snsId);
-    // TODO : 예외처리 공통화 처리 후 수정.
-    if (member == null) {
-      throw new RuntimeException(
-          "[UNAUTHORIZED] 가입된 회원이 아닙니다. SNS_ID : " + EncryptUtil.encodeId(snsId));
-    }
-    return memberConverter.convertResponse(member);
-  }
+//  public MemberDefaultDto.Response signin(MemberSigninDto.Request request) {
+//
+//    KakaoTokenDto tokenInfo = kakaoProvider.getTokenInfo(request.authCode());
+//    // TODO : 예외처리 공통화 처리 후 수정.
+//    if (tokenInfo == null) {
+//      throw new RuntimeException("[UNAUTHORIZED] 소셜 로그인 실패. 관리자 문의 바람");
+//    }
+//    Long snsId = kakaoProvider.getSnsId(tokenInfo.getIdToken());
+//    Member member = memberMapper.getMemberDetailBySnsId(snsId);
+//    // TODO : 예외처리 공통화 처리 후 수정.
+//    if (member == null) {
+//      throw new RuntimeException(
+//          "[UNAUTHORIZED] 가입된 회원이 아닙니다. SNS_ID : " + EncryptUtil.encodeId(snsId));
+//    }
+//    return memberConverter.convertResponse(member);
+//  }
 
   public MemberDefaultDto.Response signup(String sns, Request request) {
 
@@ -85,7 +78,7 @@ public class MemberService {
     return memberConverter.convertResponse(newMember);
   }
 
-  public Member getMemberDetailBySnsId(Long snsId) {
+  public Member getMemberDetailBySnsId(String snsId) {
     Member member = memberMapper.getMemberDetailBySnsId(snsId);
 
     if (ObjectUtils.isEmpty(member)) {

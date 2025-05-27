@@ -16,8 +16,8 @@ public class JwtTokenValidator {
   private final JwtTokenIssuer jwtTokenIssuer;
   private static final String AUTHORIZATION = "Authorization";
 
-  public Long getSnsIdFromClaim(Claims claims) {
-    return claims.get("snsId", Long.class);
+  public String getSnsIdFromClaim(Claims claims) {
+    return claims.get("snsId").toString();
   }
 
   public String extractToken(HttpServletRequest request) {

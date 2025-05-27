@@ -24,7 +24,7 @@ public class JwtTokenIssuer {
 
   public static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
 
-  public String createAccessToken(Long snsId, Long limitTime, ChronoUnit unit) {
+  public String createAccessToken(String snsId, Long limitTime, ChronoUnit unit) {
     JwtBuilder jwtBuild = Jwts.builder()
         .setHeader(createHeader())
         .setClaims(createClaims(snsId))
@@ -42,7 +42,7 @@ public class JwtTokenIssuer {
     return header;
   }
 
-  private Map<String, Object> createClaims(Long snsId) {
+  private Map<String, Object> createClaims(String snsId) {
     Map<String, Object> claims = new HashMap<>();
 
     claims.put("snsId", snsId);

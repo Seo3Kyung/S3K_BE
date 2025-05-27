@@ -5,7 +5,7 @@ import com.s3k.backend.security.handler.CustomAccessDeniedHandler;
 import com.s3k.backend.security.handler.CustomAuthenticationEntryPoint;
 import com.s3k.backend.security.handler.OAuth2LoginFailureHandler;
 import com.s3k.backend.security.handler.OAuth2LoginSuccessHandler;
-import com.s3k.backend.security.service.CustomOAuth2UserService;
+import com.s3k.backend.security.service.CustomOidcUserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final CustomOAuth2UserService customOAuth2UserService;
+  private final CustomOidcUserService customOidcUserService;
   private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
   private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
   private final CustomJwtAuthenticationFilter customJwtAuthenticationFilter;
@@ -46,7 +46,7 @@ public class SecurityConfig {
         .oauth2Login(oauth -> oauth
             .authorizationEndpoint(a -> a.baseUri("/oauth2/authorization"))
             .redirectionEndpoint(r -> r.baseUri("/login/oauth2/code/*"))
-            .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
+            .userInfoEndpoint(u -> u.oidcUserService(customOidcUserService))
             .successHandler(oAuth2LoginSuccessHandler)
             .failureHandler(oAuth2LoginFailureHandler)
         )

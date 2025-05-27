@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.s3k.backend.member.entity.Member;
 import com.s3k.backend.member.enums.Sns;
 import com.s3k.backend.member.mapper.MemberMapper;
-import java.time.LocalDateTime;
+import com.s3k.backend.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
@@ -23,10 +23,11 @@ public class MemberMapperTests {
 
   @Autowired
   private MemberMapper memberMapper;
+  @Autowired
+  private MemberService memberService;
 
   @Test
   void contextLoads() {
-    // 빈이 제대로 주입되는지 간단한 널 체크
     assertNotNull(memberMapper);
   }
 
@@ -34,17 +35,17 @@ public class MemberMapperTests {
   @DisplayName("임시 회원가입 테스트")
   void testInsertPendingMember() {
     // given
-    Long snsId = 123456789L;
+    String snsId = "123456789";
     Sns sns = Sns.KAKAO;
-    Member pendingMember = Member.createPendingMember(snsId, sns, LocalDateTime.now());
+    Member pendingMember = Member.createPendingMember(snsId, sns);
 
     // when
     memberMapper.insertPendingMember(pendingMember);
 
     // then
-    Member insertMember = memberMapper.getMemberDetailBySnsId(snsId);
+    Member member = memberMapper.getMemberDetailBySnsId(snsId);
     assertNotNull(pendingMember);
-    assertEquals(snsId, insertMember.getSnsId());
-    assertEquals(sns.getValue(), insertMember.getSns());
+    assertEquals(snsId, member.getSnsId());
+    assertEquals(sns.getValue(), member.getSns());
   }
 }

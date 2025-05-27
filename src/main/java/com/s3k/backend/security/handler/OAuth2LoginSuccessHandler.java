@@ -1,5 +1,7 @@
 package com.s3k.backend.security.handler;
 
+import static com.s3k.backend.security.service.CustomOidcUserService.ID_TOKEN_CLAIM_NAME;
+
 import com.s3k.backend.security.jwt.JwtTokenIssuer;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,16 +29,16 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException {
 
-    Long userSnsId = getSnsIdFromAuthentication(authentication);
+    String snsId = getSnsIdFromAuthentication(authentication);
 
-    // 신규 회원이 로그인하면 만료시간이 30분인 토큰
+    // 신규 회원이 로그인하면 만료시간이 5분인 토큰
     String redirectURL = SIGN_UP_URL;
-    String accessToken = jwtTokenIssuer.createAccessToken(userSnsId, 5L, ChronoUnit.MINUTES);
+    String accessToken = jwtTokenIssuer.createAccessToken(snsId, 5L, ChronoUnit.MINUTES);
 
     if (isActiveUser(authentication)) {
       // 기존 회원이 로그인하면 만료시간이 6시간인 토큰
       redirectURL = HOME_URL;
-      accessToken = jwtTokenIssuer.createAccessToken(userSnsId, 6L, ChronoUnit.HOURS);
+      accessToken = jwtTokenIssuer.createAccessToken(snsId, 6L, ChronoUnit.HOURS);
     }
 
     ResponseCookie accessTokenCookie = createAccessTokenCookie(accessToken);
@@ -53,10 +55,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     return false;
   }
 
-  private Long getSnsIdFromAuthentication(Authentication authentication) {
+  private String getSnsIdFromAuthentication(Authentication authentication) {
     OAuth2User userInfo = (OAuth2User) authentication.getPrincipal();
 
-    return userInfo.getAttribute("snsId");
+    return userInfo.getAttributes().get(ID_TOKEN_CLAIM_NAME).toString();
   }
 
   private ResponseCookie createAccessTokenCookie(String accessToken) {

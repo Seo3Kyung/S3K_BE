@@ -14,7 +14,7 @@ import lombok.Data;
 public class Member {
 
   private Long id; // 서비스 회원 ID
-  private Long snsId; // SNS 고유 식별 ID
+  private String snsId; // SNS 고유 식별 ID
   private int sns; // SNS 종류
   private String nickname; // 서비스 회원 닉네임
   //  private String memberId; - snsId로 대체
@@ -27,13 +27,12 @@ public class Member {
   private LocalDateTime createdAt; // 서비스 회원 정보 생성 일자(가입)
   private LocalDateTime updatedAt; // 서비스 회원 정보 수정 일자
 
-  public static Member createPendingMember(Long snsId, Sns sns, LocalDateTime registerTime) {
+  public static Member createPendingMember(String snsId, Sns sns) {
     return Member.builder()
         .snsId(snsId)
         .sns(sns.getValue())
         .role(Role.CHECK.getValue())
         .status(Status.PENDING.getValue())
-        .createdAt(registerTime)
         .build();
   }
 }

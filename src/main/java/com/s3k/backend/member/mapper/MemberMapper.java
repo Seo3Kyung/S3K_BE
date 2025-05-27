@@ -6,11 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MemberMapper {
 
+  boolean existsMemberBySnsId(String snsId);
+
   void insertPendingMember(Member pendingMember);
 
   void createMember(Member parameter);
 
   Member getMemberDetail(Long memberId);
 
-  Member getMemberDetailBySnsId(Long snsId);
+  Member getMemberDetailBySnsId(String snsId);
 }

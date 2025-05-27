@@ -21,6 +21,6 @@ public class OAuth2LoginFailureHandler implements AuthenticationFailureHandler {
 
     String errorMessage = URLEncoder.encode(exception.getMessage(), StandardCharsets.UTF_8);
     log.error("OAuth2 로그인 실패, 원인 : {}", errorMessage);
-    response.sendRedirect(request.getContextPath() + "/home=" + errorMessage);
+    response.sendRedirect("http://localhost:3000/login");
   }
 }

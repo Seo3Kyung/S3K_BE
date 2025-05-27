@@ -52,12 +52,12 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
       FilterChain filterChain) throws ServletException, IOException {
 
     try {
-
+      
       String accessToken = jwtTokenValidator.extractToken(request);
 
       if (accessToken != null) {
         Claims claims = jwtTokenValidator.parseClaims(accessToken);
-        Long snsId = jwtTokenValidator.getSnsIdFromClaim(claims);
+        String snsId = jwtTokenValidator.getSnsIdFromClaim(claims);
         Member member = memberService.getMemberDetailBySnsId(snsId);
         saveAuthentication(member);
       }
