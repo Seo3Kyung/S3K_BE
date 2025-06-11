@@ -8,8 +8,8 @@ import com.s3k.backend.member.enums.Role;
 import com.s3k.backend.member.enums.Sns;
 import com.s3k.backend.member.enums.Status;
 import com.s3k.backend.member.mapper.MemberMapper;
-import com.s3k.backend.member.service.inner.KakaoProvider;
-import com.s3k.backend.member.service.inner.MemberConverter;
+//import com.s3k.backend.member.service.inner.KakaoProvider;
+//import com.s3k.backend.member.service.inner.MemberConverter;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +20,8 @@ import org.springframework.util.ObjectUtils;
 @RequiredArgsConstructor
 public class MemberService {
 
-  private final KakaoProvider kakaoProvider;
-  private final MemberConverter memberConverter;
+//  private final KakaoProvider kakaoProvider;
+//  private final MemberConverter memberConverter;
   private final MemberMapper memberMapper;
 
   public boolean existsMemberBySnsId(String snsId) {
@@ -52,31 +52,31 @@ public class MemberService {
 //    return memberConverter.convertResponse(member);
 //  }
 
-  public MemberDefaultDto.Response signup(String sns, Request request) {
+//  public MemberDefaultDto.Response signup(String sns, Request request) {
 
     // TODO : 회원 가입 전 Validation 추가.
 
-    LocalDateTime currentDateTime = LocalDateTime.now();
-    Member insertMember = new Member(
-        null,
-        request.snsId(),
-        Sns.valueOf(sns).getValue(),
-        request.nickname(),
-        request.tos(),
-        request.privacyPolicy(),
-        currentDateTime,
-        Role.MEMBER.getValue(),
-        Status.ACTIVE.getValue(),
-        currentDateTime,
-        currentDateTime
-    );
-    memberMapper.createMember(insertMember);
+//    LocalDateTime currentDateTime = LocalDateTime.now();
+//    Member insertMember = new Member(
+//        null,
+//        request.snsId(),
+//        Sns.valueOf(sns).getValue(),
+//        request.nickname(),
+//        request.tos(),
+//        request.privacyPolicy(),
+//        currentDateTime,
+//        Role.MEMBER.getValue(),
+//        Status.ACTIVE.getValue(),
+//        currentDateTime,
+//        currentDateTime
+//    );
+//    memberMapper.createMember(insertMember);
 //    System.out.println(insertMember.getId());
-    Member newMember = memberMapper.getMemberDetail(insertMember.getId());
+//    Member newMember = memberMapper.getMemberDetail(insertMember.getId());
 //    System.out.println(newMember);
 
-    return memberConverter.convertResponse(newMember);
-  }
+//    return memberConverter.convertResponse(newMember);
+//  }
 
   public Member getMemberDetailBySnsId(String snsId) {
     Member member = memberMapper.getMemberDetailBySnsId(snsId);
