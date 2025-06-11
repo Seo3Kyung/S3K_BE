@@ -1,5 +1,7 @@
 package com.s3k.backend.security.service;
 
+import static com.s3k.backend.security.config.SecurityConstants.ID_TOKEN_CLAIM_NAME;
+
 import com.s3k.backend.member.entity.Member;
 import com.s3k.backend.member.enums.Role;
 import com.s3k.backend.member.service.MemberService;
@@ -21,8 +23,6 @@ public class CustomOidcUserService extends OidcUserService {
 
   private final MemberService memberService;
 
-  public static final String ID_TOKEN_CLAIM_NAME = "sub";
-
   @Override
   public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
     OidcUser oidcUser = super.loadUser(userRequest);
@@ -43,7 +43,8 @@ public class CustomOidcUserService extends OidcUserService {
       return new DefaultOidcUser(auths,
           oidcUser.getIdToken(),
           oidcUser.getUserInfo(),
-          ID_TOKEN_CLAIM_NAME);
+          ID_TOKEN_CLAIM_NAME
+      );
 
     } catch (Exception e) {
       throw new OAuth2AuthenticationException(

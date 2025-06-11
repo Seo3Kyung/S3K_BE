@@ -54,11 +54,10 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/swagger", "/api/swagger-ui/**", "/v3/api-docs/**", "/webjars/**")
             .permitAll()
-            .requestMatchers("/api/members/sign-up").hasAuthority("CHECK")
-            .requestMatchers("/oauth2/authorization/**", "/login/oauth2/code/**"
-            )
+            .requestMatchers("/api/members/signup").hasAuthority("CHECK")
+            .requestMatchers("/oauth2/authorization/**", "/login/oauth2/code/**")
             .permitAll()
-            .anyRequest().authenticated()
+            .anyRequest().permitAll()
         )
 
         .exceptionHandling(ex -> {

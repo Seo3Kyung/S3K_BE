@@ -31,7 +31,8 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     response.setCharacterEncoding("UTF-8");
 
     String responseBody = objectMapper.writeValueAsString(
-        "권한 오류: " + accessDeniedException.getMessage());
+        "[권한 오류] " + accessDeniedException.getMessage()
+    );
 
     response.getWriter().write(responseBody);
     response.getWriter().flush();
@@ -40,9 +41,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
   private void detailErrorLog(HttpServletRequest request) {
     Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    log.error("[권한 오류] 요청자 SNS_ID: {}, 요청자 권한: {}, 요청 경로: {}",
+    log.error(
+        "[권한 오류] 요청자 SNS_ID: {}, 요청자 권한: {}, 요청 경로: {}",
         member.getSnsId(),
         Role.getEnum(member.getRole()),
-        request.getRequestURI());
+        request.getRequestURI()
+    );
   }
 }

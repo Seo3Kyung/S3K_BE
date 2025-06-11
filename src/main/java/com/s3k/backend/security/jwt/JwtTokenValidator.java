@@ -1,5 +1,8 @@
 package com.s3k.backend.security.jwt;
 
+import static com.s3k.backend.security.config.SecurityConstants.ACCESS_TOKEN_SUBJECT;
+import static com.s3k.backend.security.config.SecurityConstants.TOKEN_CLAIM_FIRST_KEY;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
@@ -14,21 +17,15 @@ import org.springframework.stereotype.Component;
 public class JwtTokenValidator {
 
   private final JwtTokenIssuer jwtTokenIssuer;
-  private static final String AUTHORIZATION = "Authorization";
 
   public String getSnsIdFromClaim(Claims claims) {
-    return claims.get("snsId").toString();
+    return claims.get(TOKEN_CLAIM_FIRST_KEY).toString();
   }
 
   public String extractToken(HttpServletRequest request) {
-    String bearer = request.getHeader(AUTHORIZATION);
-    if (bearer != null && bearer.startsWith("Bearer ")) {
-      return bearer.substring(7);
-    }
-
     if (request.getCookies() != null) {
       return Arrays.stream(request.getCookies())
-          .filter(cookie -> JwtTokenIssuer.ACCESS_TOKEN_SUBJECT.equals(cookie.getName()))
+          .filter(cookie -> ACCESS_TOKEN_SUBJECT.equals(cookie.getName()))
           .findFirst()
           .map(Cookie::getValue)
           .orElse(null);

@@ -44,7 +44,8 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String path = request.getRequestURI();
-    return EXCLUDED_PATHS.stream().anyMatch(path::startsWith);
+    return EXCLUDED_PATHS.stream()
+        .anyMatch(path::startsWith);
   }
 
   @Override
@@ -52,7 +53,9 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
       FilterChain filterChain) throws ServletException, IOException {
 
     try {
-      
+
+      log.info(request.getRequestURI());
+
       String accessToken = jwtTokenValidator.extractToken(request);
 
       if (accessToken != null) {

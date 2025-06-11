@@ -1,5 +1,8 @@
 package com.s3k.backend.security.jwt;
 
+import static com.s3k.backend.security.config.SecurityConstants.ACCESS_TOKEN_SUBJECT;
+import static com.s3k.backend.security.config.SecurityConstants.TOKEN_CLAIM_FIRST_KEY;
+
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,8 +25,6 @@ public class JwtTokenIssuer {
   @Value("${jwt.secret.key}")
   private String signingKey;
 
-  public static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
-
   public String createAccessToken(String snsId, Long limitTime, ChronoUnit unit) {
     JwtBuilder jwtBuild = Jwts.builder()
         .setHeader(createHeader())
@@ -45,12 +46,12 @@ public class JwtTokenIssuer {
   private Map<String, Object> createClaims(String snsId) {
     Map<String, Object> claims = new HashMap<>();
 
-    claims.put("snsId", snsId);
+    claims.put(TOKEN_CLAIM_FIRST_KEY, snsId);
     return claims;
   }
 
   /**
-   * 지정된 단위(amount, unit)로 만료 일시 계산
+   * 지정된 단위(limitTime, unit)로 만료 일시 계산
    *
    * @param limitTime 필요한 시간 또는 날짜의 양
    * @param unit      ChronoUnit (HOURS, DAYS, MINUTES 등)

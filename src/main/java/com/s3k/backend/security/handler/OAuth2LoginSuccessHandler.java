@@ -1,8 +1,13 @@
 package com.s3k.backend.security.handler;
 
-import static com.s3k.backend.security.service.CustomOidcUserService.ID_TOKEN_CLAIM_NAME;
+import static com.s3k.backend.security.config.SecurityConstants.ACCESS_TOKEN_SUBJECT;
+import static com.s3k.backend.security.config.SecurityConstants.HOME_PATH;
+import static com.s3k.backend.security.config.SecurityConstants.ID_TOKEN_CLAIM_NAME;
+import static com.s3k.backend.security.config.SecurityConstants.PENDING_USER;
+import static com.s3k.backend.security.config.SecurityConstants.SIGN_UP_PATH;
 
 import com.s3k.backend.security.jwt.JwtTokenIssuer;
+import com.s3k.backend.security.util.RedirectUrlUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,9 +26,6 @@ import org.springframework.stereotype.Component;
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
   private final JwtTokenIssuer jwtTokenIssuer;
-  private static final String SIGN_UP_URL = "http://localhost:3000/signup";
-  private static final String HOME_URL = "http://localhost:3000/home";
-  private static final String PENDING_USER = "CHECK";
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -32,18 +34,20 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     String snsId = getSnsIdFromAuthentication(authentication);
 
     // 신규 회원이 로그인하면 만료시간이 5분인 토큰
-    String redirectURL = SIGN_UP_URL;
+    String redirectPath = SIGN_UP_PATH;
     String accessToken = jwtTokenIssuer.createAccessToken(snsId, 5L, ChronoUnit.MINUTES);
 
     if (isActiveUser(authentication)) {
       // 기존 회원이 로그인하면 만료시간이 6시간인 토큰
-      redirectURL = HOME_URL;
+      redirectPath = HOME_PATH;
       accessToken = jwtTokenIssuer.createAccessToken(snsId, 6L, ChronoUnit.HOURS);
     }
 
+    String redirectUrl = RedirectUrlUtils.resolveFrontUrl(request);
+
     ResponseCookie accessTokenCookie = createAccessTokenCookie(accessToken);
     response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
-    response.sendRedirect(redirectURL);
+    response.sendRedirect(redirectUrl + redirectPath);
   }
 
   private boolean isActiveUser(Authentication authentication) {
@@ -62,7 +66,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
   }
 
   private ResponseCookie createAccessTokenCookie(String accessToken) {
-    return ResponseCookie.from(JwtTokenIssuer.ACCESS_TOKEN_SUBJECT, accessToken)
+    return ResponseCookie.from(ACCESS_TOKEN_SUBJECT, accessToken)
         .httpOnly(true)
         .path("/")
         .maxAge(3600)
