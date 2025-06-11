@@ -34,14 +34,14 @@ public class MemberController {
     return "인증 테스트 성공";
   }
 
-  @PostMapping("/sign-up/{sns}")
-  public MemberDefaultDto.Response signUp(
-      @PathVariable String sns,
-      @RequestBody MemberSignupDto.Request request
-  ) {
+//  @PostMapping("/sign-up/{sns}")
+//  public MemberDefaultDto.Response signUp(
+//      @PathVariable String sns,
+//      @RequestBody MemberSignupDto.Request request
+//  ) {
     // TODO : 예외처리 공통화 처리 후 수정.
-    return memberService.signup(sns.toUpperCase(), request);
-  }
+//    return memberService.signup(sns.toUpperCase(), request);
+//  }
 
   @PostMapping("/test/sign-up")
   public String signUp(@RequestBody MemberSignupDto.Request request,
