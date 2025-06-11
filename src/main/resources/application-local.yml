@@ -3,7 +3,23 @@ spring:
   application:
     name: backend
   datasource:
-    url: jdbc:postgresql://localhost:5432/local
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=s3k
     driver-class-name: org.postgresql.Driver
-    username: user
+    username: postgres
+    password: 159510
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            redirect-uri: "http://localhost:9999/login/oauth2/code/kakao"
+          google:
+            redirect-uri: "http://localhost:9999/login/oauth2/code/google"
+          naver:
+            redirect-uri: "http://localhost:9999/login/oauth2/code/naver"
+
+  # 혹시나 해서 살려둠
+  mybatis:
+    mapper-locations: classpath:mapper/**/*.xml
+    type-aliases-package: com.s3k.backend
 ...
