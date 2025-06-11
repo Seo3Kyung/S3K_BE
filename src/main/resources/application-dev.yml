@@ -5,8 +5,8 @@ spring:
   datasource:
     url: jdbc:postgresql://${dev.datasource.dockerHost}:5432/s3k
     driver-class-name: org.postgresql.Driver
-    username: ${ dev.datasource.usernames }
-    password: ${ dev.datasource.password }
+    username: ${dev.datasource.usernames}
+    password: ${dev.datasource.password}
   security:
     oauth2:
       client:
@@ -22,5 +22,5 @@ logging:
   level:
     root: info
   discord:
-    webhook-url: ${ dev.discord.webhook-url }
+    webhook-url: ${dev.discord.webhook-url}
 ...
