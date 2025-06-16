@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    if: ${{ github.event_name == 'push' || github.event.pull_request.merged == true}}
+    if: ${{github.event_name == 'push' || github.event.pull_request.merged == true}}
     runs-on: ubuntu-latest
     environment: dev
 
@@ -42,17 +42,17 @@ jobs:
     - name: Notify Discord on build success
       uses: appleboy/discord-action@v1.2.0
       with:
-        webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
-        webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+        webhook_id: ${{secrets.DISCORD_WEBHOOK_ID}}
+        webhook_token: ${{secrets.DISCORD_WEBHOOK_TOKEN}}
         color: "#7FFF00"
-        message: ":white_check_mark: 빌드 성공: ${{ github.event.repository.full_name }} - ${{ github.sha }}"
+        message: ":white_check_mark: 빌드 성공: ${{github.event.repository.full_name}} - ${{github.sha}}"
       if: success()
 
     - name: Notify Discord on build failure
       uses: appleboy/discord-action@v1.2.0
       with:
-        webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
-        webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+        webhook_id: ${{secrets.DISCORD_WEBHOOK_ID}}
+        webhook_token: ${{secrets.DISCORD_WEBHOOK_TOKEN}}
         color: "#00FF00"
         message: ":x: 빌드 실패: ${{github.event.repository.full_name}} - ${{github.sha}}"
       if: failure()
@@ -91,19 +91,19 @@ jobs:
       - name: Notify Discord on build success
         uses: appleboy/discord-action@v1.2.0
         with:
-          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
-          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          webhook_id: ${{secrets.DISCORD_WEBHOOK_ID}}
+          webhook_token: ${{secrets.DISCORD_WEBHOOK_TOKEN}}
           color: "#7FFF00"
-          message: ":whale: 도커 이미지 푸쉬 성공: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.sha }}"
+          message: ":whale: 도커 이미지 푸쉬 성공: ${{secrets.DOCKERHUB_USERNAME}}/${{github.event.repository.name}}:${{github.sha}}"
         if: success()
 
       - name: Notify Discord on build failure
         uses: appleboy/discord-action@v1.2.0
         with:
-          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
-          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          webhook_id: ${{secrets.DISCORD_WEBHOOK_ID}}
+          webhook_token: ${{secrets.DISCORD_WEBHOOK_TOKEN}}
           color: "#00FF00"
-          message: ":x: 도커 이미지 푸쉬 실패: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.sha }}"
+          message: ":x: 도커 이미지 푸쉬 실패: ${{secrets.DOCKERHUB_USERNAME}}/${{github.event.repository.name}}:${{github.sha}}"
         if: failure()
 
   deploy:
@@ -116,31 +116,31 @@ jobs:
       - name: SSH and Update Docker Image on EC2
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          port: ${{ secrets.EC2_PORT || 22 }}
+          host: ${{secrets.EC2_HOST}}
+          username: ${{secrets.EC2_USERNAME}}
+          key: ${{secrets.EC2_PRIVATE_KEY}}
+          port: ${{secrets.EC2_PORT || 22}}
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/s3k-dev:latest
-            docker stop ${{ secrets.EC2_CONTAINER_NAME }} || true
-            docker rm ${{ secrets.EC2_CONTAINER_NAME }} || true
-            docker run -d --name ${{ secrets.EC2_CONTAINER_NAME }} -p ${{ secrets.EC2_PORT_FORWARDING }} -e SPRING_PROFILES_ACTIVE=dev ${{ secrets.DOCKERHUB_USERNAME }}/s3k-dev:latest
+            docker pull ${{secrets.DOCKERHUB_USERNAME}}/s3k-dev:latest
+            docker stop ${{secrets.EC2_CONTAINER_NAME}}
+            docker rm ${{secrets.EC2_CONTAINER_NAME}}
+            docker run -d --name ${{secrets.EC2_CONTAINER_NAME}} -p ${{secrets.EC2_PORT_FORWARDING}} -e SPRING_PROFILES_ACTIVE=dev ${{secrets.DOCKERHUB_USERNAME}}/s3k-dev:latest
             docker image prune -af
 
       - name: Notify Discord on deploy success
         uses: appleboy/discord-action@v1.2.0
         with:
-          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
-          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          webhook_id: ${{secrets.DISCORD_WEBHOOK_ID}}
+          webhook_token: ${{secrets.DISCORD_WEBHOOK_TOKEN}}
           color: "00FF00"
-          message: ":rocket: EC2 배포 성공: ${{ secrets.EC2_HOST }}"
+          message: ":rocket: EC2 배포 성공: ${{secrets.EC2_HOST}}"
         if: success()
 
       - name: Notify Discord on deploy failure
         uses: appleboy/discord-action@v1.2.0
         with:
-          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
-          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          webhook_id: ${{secrets.DISCORD_WEBHOOK_ID}}
+          webhook_token: ${{secrets.DISCORD_WEBHOOK_TOKEN}}
           color: "FF0000"
-          message: ":x: EC2 배포 실패: ${{ secrets.EC2_HOST }}"
+          message: ":x: EC2 배포 실패: ${{secrets.EC2_HOST}}"
         if: failure()
