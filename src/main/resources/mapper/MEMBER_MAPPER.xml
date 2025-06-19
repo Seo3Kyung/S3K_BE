@@ -10,6 +10,12 @@
     WHERE sns_id = #{snsId}
   </select>
 
+  <select id="existsByNickname" resultType="boolean">
+    SELECT COUNT(*) > 0
+    FROM MEMBER
+    WHERE nickname = #{nickname}
+  </select>
+
   <insert id="insertPendingMember" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO MEMBER
     (
@@ -26,6 +32,25 @@
       #{status}
     )
   </insert>
+
+  <update id="updatePendingMemberNickname">
+    UPDATE MEMBER
+    SET nickname = #{nickname}
+    WHERE sns_id = #{snsId}
+  </update>
+
+  <update id="updateActiveMember" >
+    UPDATE MEMBER
+    SET
+        nickname = #{nickname},
+        gender = #{gender},
+        birthYear = #{birthYear},
+        address = #{address},
+        role = #{role},
+        status = #{status}
+    WHERE   id = #{id}
+        AND sns_id = #{snsId}
+  </update>
 
   <insert id="createMember" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO member
@@ -55,6 +80,7 @@
       #{updatedAt}
     )
   </insert>
+
   <select id="getMemberDetail" resultType="com.s3k.backend.member.entity.Member">
     SELECT
     id,
@@ -70,6 +96,7 @@
     updated_at
     FROM member WHERE id = #{memberId}
   </select>
+
   <select id="getMemberDetailBySnsId" resultType="com.s3k.backend.member.entity.Member">
     SELECT
       id,
@@ -82,7 +109,10 @@
       role,
       status,
       created_at,
-      updated_at
+      updated_at,
+      gender,
+      birthYear,
+      address
     FROM member
     WHERE sns_id = #{snsId}
   </select>
