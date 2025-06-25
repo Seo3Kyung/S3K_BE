@@ -1,7 +1,7 @@
 package com.s3k.backend.member.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.s3k.backend.global.EncodedIdSerializer;
+import com.s3k.backend.global.util.EncodedIdSerializer;
 import com.s3k.backend.member.enums.Role;
 import com.s3k.backend.member.enums.Sns;
 import com.s3k.backend.member.enums.Status;

@@ -1,4 +1,4 @@
-package com.s3k.backend.member.service.inner;
+package com.s3k.backend.member.service;
 
 //import com.s3k.backend.member.dto.feign.KakaoTokenDto;
 //import org.springframework.cloud.openfeign.FeignClient;

@@ -26,8 +26,6 @@ public class MemberService {
   }
 
   public Member getMemberDetailBySnsId(String snsId) {
-    this.ensureMemberExists(snsId);
-
     return memberMapper.getMemberDetailBySnsId(snsId);
   }
 
@@ -43,18 +41,9 @@ public class MemberService {
 
   @Transactional
   public void registerMember(MemberSignupDto.Request memberSignupDto, String snsId) {
-    this.ensureMemberExists(snsId);
-
     Member pendingMember = memberMapper.getMemberDetailBySnsId(snsId);
 
     Member activedMember = pendingMember.completeSignupProfile(memberSignupDto);
     memberMapper.updateActiveMember(activedMember);
-  }
-
-  private void ensureMemberExists(String snsId) {
-    if (!memberMapper.existsMemberBySnsId(snsId)) {
-      throw new IllegalArgumentException(
-          "[NOT_FOUND] 회원 정보가 존재하지 않습니다. MEMBER_ID : " + snsId);
-    }
   }
 }
