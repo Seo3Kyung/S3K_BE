@@ -55,6 +55,13 @@
       #{updatedAt}
     )
   </insert>
+
+  <update id="updatePendingMemberProfile">
+    UPDATE MEMBER
+    SET profile_photo = #{fileName}
+    WHERE sns_id = #{snsId}
+  </update>
+
   <select id="getMemberDetail" resultType="com.s3k.backend.member.entity.Member">
     SELECT
     id,
