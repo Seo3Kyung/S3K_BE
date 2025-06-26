@@ -71,6 +71,8 @@ public class Member {
         .gender(dto.gender())
         .birthYear(dto.birthYear())
         .address(dto.address())
+        .tos(dto.tos())
+        .privacyPolicy(dto.privacyPolicy())
         .role(Role.MEMBER.getValue())
         .status(Status.ACTIVE.getValue())
         .build();

@@ -46,6 +46,8 @@
         gender = #{gender},
         birthYear = #{birthYear},
         address = #{address},
+        tos = #{tos},
+        privacy_policy = #{privacyPolicy},
         role = #{role},
         status = #{status}
     WHERE   id = #{id}
