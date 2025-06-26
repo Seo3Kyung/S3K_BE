@@ -1,8 +1,9 @@
-package com.s3k.backend.photo.controller;
+package com.s3k.backend.file.controller;
 
+import com.s3k.backend.file.service.FileService;
+import com.s3k.backend.file.validator.ImageValidator;
 import com.s3k.backend.global.dto.ApisResponse;
 import com.s3k.backend.member.entity.Member;
-import com.s3k.backend.photo.service.PhotoService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,21 +17,23 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/photos")
 @RequiredArgsConstructor
-public class PhotoController {
+public class FileController {
 
-  private final PhotoService photoService;
+  private final FileService fileService;
+  private final ImageValidator imageValidator;
 
   @PostMapping("/register")
   public ApisResponse<String> saveProfileImageForRegister(
       @RequestParam("file") MultipartFile file,
       @AuthenticationPrincipal Member principal) throws IOException {
-    return ApisResponse.ok(photoService.savePhotoForRegister(file, principal.getSnsId()));
+    imageValidator.validate(file);
+    return ApisResponse.ok(fileService.savePhotoForRegister(file, principal.getSnsId()));
   }
 
   @PostMapping("/s3/save")
   public ApisResponse<String> saveProfileImageForSave(
       @RequestPart MultipartFile file,
       @AuthenticationPrincipal Member principal) throws IOException {
-    return ApisResponse.ok(photoService.savePhotoInS3(file, principal.getSnsId()));
+    return ApisResponse.ok(fileService.savePhotoInS3(file, principal.getSnsId()));
   }
 }

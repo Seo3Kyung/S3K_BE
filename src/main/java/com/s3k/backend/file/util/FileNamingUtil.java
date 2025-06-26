@@ -1,4 +1,4 @@
-package com.s3k.backend.photo.util;
+package com.s3k.backend.file.util;
 
 import org.springframework.stereotype.Component;
 

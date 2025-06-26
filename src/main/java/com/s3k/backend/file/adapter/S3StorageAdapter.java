@@ -1,6 +1,6 @@
-package com.s3k.backend.photo.adapter;
+package com.s3k.backend.file.adapter;
 
-import com.s3k.backend.photo.interfaces.PhotoStorage;
+import com.s3k.backend.file.interfaces.FileStorage;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Template;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @Qualifier("s3")
-public class S3StorageAdapter implements PhotoStorage {
+public class S3StorageAdapter implements FileStorage {
 
   private final S3Template s3Template;
   @Value("${spring.cloud.aws.s3.bucket}")

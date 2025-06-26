@@ -1,7 +1,7 @@
-package com.s3k.backend.photo.adapter;
+package com.s3k.backend.file.adapter;
 
-import com.s3k.backend.photo.interfaces.PhotoStorage;
-import com.s3k.backend.photo.util.FileNamingUtil;
+import com.s3k.backend.file.interfaces.FileStorage;
+import com.s3k.backend.file.util.FileNamingUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Qualifier("local")
-public class LocalPhotoStorageAdapter implements PhotoStorage {
+public class LocalStorageAdapter implements FileStorage {
 
   private static final String FILE_EXTENSION_SEPARATOR = ".";
 

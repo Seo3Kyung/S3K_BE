@@ -1,7 +1,7 @@
-package com.s3k.backend.photo.service;
+package com.s3k.backend.file.service;
 
+import com.s3k.backend.file.interfaces.FileStorage;
 import com.s3k.backend.member.mapper.MemberMapper;
-import com.s3k.backend.photo.interfaces.PhotoStorage;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,25 +10,25 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class PhotoService {
+public class FileService {
   private final MemberMapper memberMapper;
-  private final PhotoStorage localPhotostorage;
-  private final PhotoStorage s3StorageAdapter;
+  private final FileStorage localStorage;
+  private final FileStorage s3StorageAdapter;
 
   @Autowired
-  public PhotoService(
+  public FileService(
       MemberMapper memberMapper,
-      @Qualifier("local") PhotoStorage localPhotostorage,
-      @Qualifier("s3") PhotoStorage s3StorageAdapter
+      @Qualifier("local") FileStorage localStorage,
+      @Qualifier("s3") FileStorage s3StorageAdapter
   ) {
     this.memberMapper = memberMapper;
-    this.localPhotostorage = localPhotostorage;
+    this.localStorage = localStorage;
     this.s3StorageAdapter = s3StorageAdapter;
   }
 
   @Transactional
   public String savePhotoForRegister(MultipartFile file, String snsId) throws IOException {
-    String fileName = localPhotostorage.savePhoto(file, snsId);
+    String fileName = localStorage.savePhoto(file, snsId);
     memberMapper.updatePendingMemberProfile(snsId, fileName);
     return fileName;
   }
