@@ -1,4 +1,4 @@
-package com.s3k.backend.global;
+package com.s3k.backend.global.util;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

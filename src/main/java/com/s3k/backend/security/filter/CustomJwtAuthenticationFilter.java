@@ -67,11 +67,11 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
 
       filterChain.doFilter(request, response);
     } catch (ExpiredJwtException e) {
-      sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "[토큰 만료] ", e);
+      sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "[토큰 만료]", e);
     } catch (JwtException e) {
-      sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "[토큰 오류] ", e);
+      sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "[토큰 오류]", e);
     } catch (Exception e) {
-      sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "[서버 오류] ", e);
+      sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "[서버 오류]", e);
     }
   }
 
