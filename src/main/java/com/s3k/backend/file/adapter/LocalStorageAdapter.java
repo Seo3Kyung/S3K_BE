@@ -1,5 +1,7 @@
 package com.s3k.backend.file.adapter;
 
+import com.s3k.backend.file.dto.FileDto;
+import com.s3k.backend.file.enums.FileType;
 import com.s3k.backend.file.interfaces.FileStorage;
 import com.s3k.backend.file.util.FileNamingUtil;
 import java.io.IOException;
@@ -25,44 +27,22 @@ public class LocalStorageAdapter implements FileStorage {
   private String baseDir;
 
   @Override
-  public String savePhoto(MultipartFile file, String snsId) throws IOException {
-    validateFile(file);
-
-    String extension = extractFileExtension(file);
+  public FileDto save(MultipartFile file, String snsId) {
+    String extension = FileNamingUtil.getExtension(file);
     String randomUUID = UUID.randomUUID().toString();
     String filename = FileNamingUtil.makePhotoFileName(snsId, randomUUID, extension);
 
-    Path dirFile = Paths.get(baseDir);
-    initDirectory(dirFile);
-
-    try (InputStream inputStream = file.getInputStream()) {
-      Files.copy(
-          inputStream,
-          dirFile.resolve(filename),
-          StandardCopyOption.REPLACE_EXISTING
-      );
-    }
-
-    return filename;
-  }
-
-  private void validateFile(MultipartFile file) {
-    if (file.isEmpty()) {
-      throw new IllegalArgumentException("파일이 존재하지 않습니다");
+    try {
+      Path directory = Paths.get(baseDir);
+      if (Files.notExists(directory)) {
+        Files.createDirectories(directory);
+      }
+      InputStream inputStream = file.getInputStream();
+      Files.copy(inputStream, directory.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+      return FileDto.of(file, FileType.PROFILE.getValue(), baseDir + filename);
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new RuntimeException(e);
     }
   }
-
-  private String extractFileExtension(MultipartFile file) {
-    return Optional.ofNullable(file.getOriginalFilename())
-        .filter(n -> n.contains(FILE_EXTENSION_SEPARATOR))
-        .map(n -> n.substring(n.lastIndexOf(FILE_EXTENSION_SEPARATOR) + 1))
-        .orElse("dat");
-  }
-
-  private void initDirectory(Path dir) throws IOException {
-    if (Files.notExists(dir)) {
-      Files.createDirectories(dir);
-    }
-  }
-
 }

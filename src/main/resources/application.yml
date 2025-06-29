@@ -60,7 +60,7 @@ app:
   storage:
     type: local
     local:
-      base-dir: ./uploads/profile-images
+      base-dir: ./uploads/images
 
 jwt:
   secret:

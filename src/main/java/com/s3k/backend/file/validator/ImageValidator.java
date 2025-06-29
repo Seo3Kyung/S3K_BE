@@ -27,6 +27,9 @@ public class ImageValidator implements Validator {
   );
 
   public void validate(MultipartFile image) {
+    // null 여부 확인
+    nullCheck(image);
+    
     // 1. 파일 형식 검증
     validateMimeType(image);
 

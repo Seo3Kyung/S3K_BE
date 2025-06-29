@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.s3k.backend.file.mapper.FileMapper">
+  <insert id="saveFile" parameterType="com.s3k.backend.file.dto.FileDto">
+    INSERT INTO
+    file (
+          file_name,
+          file_type,
+          file_content_type,
+          file_extension,
+          file_path,
+          file_size,
+          status,
+          created_datetime
+        )
+    VALUES (
+             #{fileName},
+             #{fileType},
+             #{fileContentType},
+             #{fileExtension},
+             #{filePath},
+             #{fileSize},
+             #{status},
+             #{createdDatetime}
+           )
+  </insert>
+
+  <update id="uploadFile">
+    UPDATE file
+    SET
+        file_path = #{filePath},
+        status = #{status},
+        updated_datetime = #{updatedDatetime}
+    WHERE file_id = #{fileId}
+  </update>
+
+  <update id="deleteFile">
+    UPDATE file
+    SET
+        status = #{status},
+        deleted_datetime = #{deletedDatetime}
+    WHERE file_id = #{fileId}
+  </update>
+</mapper>

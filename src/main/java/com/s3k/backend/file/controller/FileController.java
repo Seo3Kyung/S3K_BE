@@ -25,9 +25,9 @@ public class FileController {
   @PostMapping("/register")
   public ApisResponse<String> saveProfileImageForRegister(
       @RequestParam("file") MultipartFile file,
-      @AuthenticationPrincipal Member principal) throws IOException {
+      @AuthenticationPrincipal Member principal) {
     imageValidator.validate(file);
-    return ApisResponse.ok(fileService.savePhotoForRegister(file, principal.getSnsId()));
+    return ApisResponse.ok(fileService.saveProfileForRegister(file, principal.getSnsId()));
   }
 
   @PostMapping("/s3/save")

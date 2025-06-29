@@ -1,6 +1,7 @@
 package com.s3k.backend.file.adapter;
 
 import com.s3k.backend.file.interfaces.FileStorage;
+import com.s3k.backend.file.util.FileNamingUtil;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Template;
 import java.io.IOException;
@@ -23,27 +24,16 @@ public class S3StorageAdapter implements FileStorage {
   }
 
   @Override
-  public String savePhoto(MultipartFile file, String snsId) throws IOException {
-    String fileName = file.getOriginalFilename();
-    String extension = getExtension(fileName);
-    String key = snsId + UUID.randomUUID();
-    validateMimeType(file.getContentType(), extension);
-    upload(file, key);
-    return key;
-  }
-
-  private String getExtension(String fileName) throws IOException {
-    if(fileName == null) return null;
-    return fileName.substring(fileName.lastIndexOf(".") + 1);
-  }
-
-  private void validateMimeType(String mimeType, String extension) {
-    switch(extension) {
-      case "jpeg": if(!mimeType.equals("image/jpeg")) { throw new IllegalArgumentException(); }
-      case "jpg": if(!mimeType.equals("image/jpg")) { throw new IllegalArgumentException(); }
-      case "png": if(!mimeType.equals("image/png")) { throw new IllegalArgumentException(); }
-      default: throw new IllegalArgumentException();
+  public String save(MultipartFile file, String snsId) {
+    String extension = FileNamingUtil.getExtension(file);
+    String fileName = FileNamingUtil.makePhotoFileName(snsId, UUID.randomUUID().toString(), extension);
+    try {
+      upload(file, fileName);
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new RuntimeException(e.getMessage());
     }
+    return fileName;
   }
 
   private void upload(MultipartFile file, String key) throws IOException {

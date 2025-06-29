@@ -58,7 +58,7 @@
 
   <update id="updatePendingMemberProfile">
     UPDATE MEMBER
-    SET profile_photo = #{fileName}
+    SET profile_image_id  = #{fileId}
     WHERE sns_id = #{snsId}
   </update>
 
