@@ -44,7 +44,7 @@
     SET
         nickname = #{nickname},
         gender = #{gender},
-        birthYear = #{birthYear},
+        birth_year = #{birthYear},
         address = #{address},
         tos = #{tos},
         privacy_policy = #{privacyPolicy},
@@ -113,7 +113,7 @@
       created_at,
       updated_at,
       gender,
-      birthYear,
+      birth_year,
       address
     FROM member
     WHERE sns_id = #{snsId}
