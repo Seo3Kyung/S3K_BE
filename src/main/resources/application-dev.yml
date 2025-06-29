@@ -5,12 +5,22 @@ spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/s3k
     driver-class-name: org.postgresql.Driver
-    username: ${ dev.datasource.usernames }
-    password: ${ dev.datasource.password }
+    username: ${dev.datasource.usernames}
+    password: ${dev.datasource.password}
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            redirect-uri: "http://3.39.252.4:9999/login/oauth2/code/kakao"
+          google:
+            redirect-uri: "http://3.39.252.4:9999/login/oauth2/code/google"
+          naver:
+            redirect-uri: "http://3.39.252.4:9999/login/oauth2/code/naver"
 
 logging:
   level:
     root: info
   discord:
-    webhook-url: ${ dev.discord.webhook-url }
+    webhook-url: ${dev.discord.webhook-url}
 ...
