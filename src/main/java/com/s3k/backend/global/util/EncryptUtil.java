@@ -1,4 +1,4 @@
-package com.s3k.backend.global;
+package com.s3k.backend.global.util;
 
 public class EncryptUtil {
 

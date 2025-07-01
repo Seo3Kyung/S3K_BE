@@ -1,4 +1,4 @@
-package com.s3k.backend.global;
+package com.s3k.backend.global.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

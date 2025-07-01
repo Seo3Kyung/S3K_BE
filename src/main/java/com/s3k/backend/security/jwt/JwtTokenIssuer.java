@@ -50,13 +50,7 @@ public class JwtTokenIssuer {
     return claims;
   }
 
-  /**
-   * 지정된 단위(limitTime, unit)로 만료 일시 계산
-   *
-   * @param limitTime 필요한 시간 또는 날짜의 양
-   * @param unit      ChronoUnit (HOURS, DAYS, MINUTES 등)
-   * @return 만료일시
-   */
+  // 지정된 단위(limitTime, unit)로 만료 일시 계산
   private Date createAccessTokenExpiredDate(long limitTime, ChronoUnit unit) {
     Instant now = Instant.now();
     Instant expireTime = now.plus(limitTime, unit);
