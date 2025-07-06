@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum FileType {
   UNKNOWN(0, "미정의"),
-  PROFILE(1, "프로필 이미지")
+  PROFILE(1, "프로필 이미지"),
+  ATTACH(2,"첨부 파일")
   ;
   private final Integer value;
   private final String desc;

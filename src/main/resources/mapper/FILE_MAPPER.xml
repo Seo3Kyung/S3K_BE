@@ -13,7 +13,7 @@
           file_path,
           file_size,
           status,
-          created_datetime
+          create_datetime
         )
     VALUES (
              #{fileName},
@@ -23,7 +23,7 @@
              #{filePath},
              #{fileSize},
              #{status},
-             #{createdDatetime}
+             #{createDatetime}
            )
   </insert>
 
@@ -43,4 +43,17 @@
         deleted_datetime = #{deletedDatetime}
     WHERE file_id = #{fileId}
   </update>
+
+  <select id="getFile" resultType="com.s3k.backend.file.entity.FileEntity">
+    SELECT
+      file_name,
+      file_type,
+      file_content_type,
+      file_extension,
+      file_path,
+      file_size,
+      status,
+    FROM file
+    WHERE file_id = #{fileId}
+  </select>
 </mapper>

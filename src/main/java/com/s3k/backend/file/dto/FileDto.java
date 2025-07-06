@@ -1,5 +1,6 @@
 package com.s3k.backend.file.dto;
 
+import com.s3k.backend.file.adapter.FileData;
 import com.s3k.backend.file.enums.FileStatus;
 import com.s3k.backend.file.util.FileNamingUtil;
 import java.time.LocalDateTime;
@@ -16,9 +17,9 @@ public class FileDto {
   private String filePath; // temp -> 경로, upload -> url
   private final Long fileSize;
   private Integer status; // temp, upload, delete
-  private final LocalDateTime createdDatetime;
-  private LocalDateTime updatedDatetime;
-  private LocalDateTime deletedDatetime;
+  private final LocalDateTime createDatetime;
+  private LocalDateTime updateDatetime;
+  private LocalDateTime deleteDatetime;
 
   private FileDto(
       String fileName,
@@ -36,33 +37,34 @@ public class FileDto {
     this.filePath = filePath;
     this.fileSize = fileSize;
     this.status = status;
-    this.createdDatetime = LocalDateTime.now();
+    this.createDatetime = LocalDateTime.now();
   }
 
   public static FileDto of(
-      MultipartFile file,
+      FileData file,
       int fileType,
-      String filePath
+      String filepath,
+      int status
   ) {
     return new FileDto(
         file.getOriginalFilename(),
         fileType,
         file.getContentType(),
-        FileNamingUtil.getExtension(file),
-        filePath,
+        file.getExtension(),
+        filepath,
         file.getSize(),
-        FileStatus.TEMP.getValue()
+        status
     );
   }
 
   public void updateUploadInfo(String fileUrl) {
     this.filePath = fileUrl;
     this.status = FileStatus.UPLOAD.getValue();
-    this.updatedDatetime = LocalDateTime.now();
+    this.updateDatetime = LocalDateTime.now();
   }
 
   public void updateDeleteInfo(){
     this.status = FileStatus.DELETE.getValue();
-    this.deletedDatetime = LocalDateTime.now();
+    this.deleteDatetime = LocalDateTime.now();
   }
 }

@@ -23,17 +23,18 @@ public class FileController {
   private final ImageValidator imageValidator;
 
   @PostMapping("/register")
-  public ApisResponse<String> saveProfileImageForRegister(
+  public ApisResponse<?> saveProfileImageForRegister(
       @RequestParam("file") MultipartFile file,
       @AuthenticationPrincipal Member principal) {
     imageValidator.validate(file);
-    return ApisResponse.ok(fileService.saveProfileForRegister(file, principal.getSnsId()));
+//    String snsId = principal.getSnsId(); // JWT 필요
+    fileService.saveProfileForRegister(file, "111111111122");
+    return ApisResponse.ok();
   }
 
   @PostMapping("/s3/save")
   public ApisResponse<String> saveProfileImageForSave(
-      @RequestPart MultipartFile file,
-      @AuthenticationPrincipal Member principal) throws IOException {
-    return ApisResponse.ok(fileService.savePhotoInS3(file, principal.getSnsId()));
+      @AuthenticationPrincipal Member principal) {
+    return ApisResponse.ok(fileService.saveProfileForS3(principal.getSnsId()));
   }
 }

@@ -1,6 +1,7 @@
 package com.s3k.backend.file.util;
 
 import java.util.Objects;
+import java.util.UUID;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,9 +18,8 @@ public class FileNamingUtil {
 
   public static String makePhotoFileName(
       final String snsId,
-      final String randomUUID,
       final String extension
   ) {
-    return "/" + snsId + SEP + randomUUID + EXT_SEPARATOR + extension;
+    return snsId + SEP + UUID.randomUUID() + EXT_SEPARATOR + extension;
   }
 }
