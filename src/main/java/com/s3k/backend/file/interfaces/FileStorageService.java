@@ -11,10 +11,10 @@ public interface FileStorageService {
 //  FileDto save(String dirPath, MultipartFile file, String snsId);
 //  byte[] getFile(String dirPath, String fileName);
 
-  FileDto upload(FileData fileData, String path) throws IOException;
-  Optional<FileData> download(String path) throws IOException;
-  boolean delete(String path) throws IOException;
-  boolean exists(String path) throws IOException;
-  Optional<FileDto> getFileInfo(String path) throws IOException;
+  FileDto upload(FileData fileData) throws IOException;
+  Optional<FileData> download(String path, String filename) throws IOException;
+  boolean delete(String path, String filename) throws IOException;
+  boolean exists(String path, String filename) throws IOException;
+  Optional<FileDto> getFileInfo(String path, String filename) throws IOException;
 
 }

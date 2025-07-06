@@ -4,6 +4,7 @@ import com.s3k.backend.file.adapter.FileData;
 import com.s3k.backend.file.enums.FileStatus;
 import com.s3k.backend.file.util.FileNamingUtil;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +18,7 @@ public class FileDto {
   private String filePath; // temp -> 경로, upload -> url
   private final Long fileSize;
   private Integer status; // temp, upload, delete
-  private final LocalDateTime createDatetime;
+  private LocalDateTime createDatetime;
   private LocalDateTime updateDatetime;
   private LocalDateTime deleteDatetime;
 
@@ -28,7 +29,8 @@ public class FileDto {
       String fileExtension,
       String filePath,
       Long fileSize,
-      Integer status
+      Integer status,
+      LocalDateTime currentDatetime
   ) {
     this.fileName = fileName;
     this.fileType = fileType;
@@ -37,30 +39,42 @@ public class FileDto {
     this.filePath = filePath;
     this.fileSize = fileSize;
     this.status = status;
-    this.createDatetime = LocalDateTime.now();
+    if (Objects.equals(status, FileStatus.TEMP.getValue())){
+      this.createDatetime = LocalDateTime.now();
+    } else if (Objects.equals(status, FileStatus.UPLOAD.getValue())){
+      this.updateDatetime = LocalDateTime.now();
+    }
   }
 
   public static FileDto of(
       FileData file,
-      int fileType,
+      Integer fileType,
       String filepath,
-      int status
+      Integer status
   ) {
-    return new FileDto(
-        file.getOriginalFilename(),
-        fileType,
-        file.getContentType(),
-        file.getExtension(),
-        filepath,
-        file.getSize(),
-        status
-    );
-  }
-
-  public void updateUploadInfo(String fileUrl) {
-    this.filePath = fileUrl;
-    this.status = FileStatus.UPLOAD.getValue();
-    this.updateDatetime = LocalDateTime.now();
+    if(Objects.equals(status, FileStatus.UPLOAD.getValue())) {
+      return new FileDto(
+          null,
+          null,
+          null,
+          null,
+          filepath,
+          null,
+          status,
+          LocalDateTime.now()
+      );
+    } else {
+      return new FileDto(
+          file.getOriginalFilename(),
+          fileType,
+          file.getContentType(),
+          file.getExtension(),
+          filepath,
+          file.getSize(),
+          status,
+          null
+      );
+    }
   }
 
   public void updateDeleteInfo(){

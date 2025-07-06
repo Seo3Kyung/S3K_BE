@@ -27,12 +27,16 @@
            )
   </insert>
 
-  <update id="uploadFile">
+  <update id="updateFile">
     UPDATE file
     SET
-        file_path = #{filePath},
-        status = #{status},
-        updated_datetime = #{updatedDatetime}
+        <if test="filePath != null">
+            file_path = #{filePath},
+        </if>
+        <if test="status != null">
+          status = #{status},
+        </if>
+        update_datetime = #{updateDatetime}
     WHERE file_id = #{fileId}
   </update>
 
@@ -40,19 +44,20 @@
     UPDATE file
     SET
         status = #{status},
-        deleted_datetime = #{deletedDatetime}
+        delete_datetime = #{deleteDatetime}
     WHERE file_id = #{fileId}
   </update>
 
   <select id="getFile" resultType="com.s3k.backend.file.entity.FileEntity">
     SELECT
+      file_id,
       file_name,
       file_type,
       file_content_type,
       file_extension,
       file_path,
       file_size,
-      status,
+      status
     FROM file
     WHERE file_id = #{fileId}
   </select>

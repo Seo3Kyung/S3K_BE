@@ -6,6 +6,7 @@ import com.s3k.backend.file.enums.FileStatus;
 import com.s3k.backend.file.enums.FileType;
 import com.s3k.backend.file.interfaces.FileStorageService;
 import com.s3k.backend.file.util.FileNamingUtil;
+import com.s3k.backend.global.util.DateTimeUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -69,8 +70,8 @@ public class LocalStorageService implements FileStorageService {
 //  }
 
   @Override
-  public FileDto upload(FileData fileData, String path) throws IOException {
-    Path targetPath = Paths.get(basePath, path);
+  public FileDto upload(FileData fileData) throws IOException {
+    Path targetPath = Paths.get(basePath, DateTimeUtil.ofNowToStringDate("yyyy-MM-dd"));
 
     Files.createDirectories(targetPath);
 
@@ -89,22 +90,41 @@ public class LocalStorageService implements FileStorageService {
   }
 
   @Override
-  public Optional<FileData> download(String path) throws IOException {
-    return Optional.empty();
+  public Optional<FileData> download(String path, String filename) throws IOException {
+    try {
+      Path filePath = Paths.get(path, filename);
+
+      if (!Files.exists(filePath)) {return Optional.empty();}
+
+      FileData fileData = FileData.fromFile(filePath);
+
+      return Optional.of(fileData);
+    } catch (Exception e) {
+      log.error("로컬 파일 정보 조회 실패: {}", path, e);
+
+      throw new IOException("로컬 파일 정보 조회 실패: " + e.getMessage(), e);
+    }
   }
 
   @Override
-  public boolean delete(String path) throws IOException {
+  public boolean delete(String path, String filename) throws IOException {
+    try {
+      Path filePath = Paths.get(path, filename);
+      boolean fileDeleted = Files.deleteIfExists(filePath);
+      log.info("로컬 파일 삭제 완료: {}", filePath);
+      return fileDeleted;
+    } catch(Exception e){
+      return false;
+    }
+  }
+
+  @Override
+  public boolean exists(String path, String filename) throws IOException {
     return false;
   }
 
   @Override
-  public boolean exists(String path) throws IOException {
-    return false;
-  }
-
-  @Override
-  public Optional<FileDto> getFileInfo(String path) throws IOException {
+  public Optional<FileDto> getFileInfo(String path, String filename) throws IOException {
     return Optional.empty();
   }
 

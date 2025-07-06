@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/photos")
+@RequestMapping("/api/file")
 @RequiredArgsConstructor
 public class FileController {
 
@@ -27,14 +27,17 @@ public class FileController {
       @RequestParam("file") MultipartFile file,
       @AuthenticationPrincipal Member principal) {
     imageValidator.validate(file);
-//    String snsId = principal.getSnsId(); // JWT 필요
-    fileService.saveProfileForRegister(file, "111111111122");
+    String snsId = principal.getSnsId(); // JWT 필요
+//    fileService.saveProfileForRegister(file, "111111111122");
+    fileService.saveProfileForRegister(file, snsId);
     return ApisResponse.ok();
   }
 
   @PostMapping("/s3/save")
-  public ApisResponse<String> saveProfileImageForSave(
+  public ApisResponse<?> saveProfileImageForSave(
       @AuthenticationPrincipal Member principal) {
-    return ApisResponse.ok(fileService.saveProfileForS3(principal.getSnsId()));
+    String snsId = principal.getSnsId(); // JWT 필요
+//    String tmpSnsId = "111111111122";
+    return ApisResponse.ok(fileService.saveProfileForS3(snsId));
   }
 }
