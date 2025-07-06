@@ -1,9 +1,15 @@
 package com.s3k.backend.global;
 
 import com.s3k.backend.global.dto.ApisResponse;
+import com.s3k.backend.global.dto.address.GetNearbyRequest;
+import com.s3k.backend.global.dto.address.GetNearbyResponse;
 import com.s3k.backend.global.enums.ApiResponseStatus;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,5 +35,26 @@ public class BasicController {
   @GetMapping("/error-test3")
   public ApisResponse<?> errorTest3(){
     return ApisResponse.error(new String[]{"1","2","3"}, ApiResponseStatus.INTERNAL_ERROR);
+  }
+
+  @PostMapping("/get-nearby")
+  public ApisResponse<GetNearbyResponse> GetNearby(
+      @RequestBody GetNearbyRequest request
+  ) {
+    return ApisResponse.ok(new GetNearbyResponse(List.of(
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동",
+        "경기도 시흥시 은행동"
+    )));
   }
 }
