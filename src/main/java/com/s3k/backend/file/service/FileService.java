@@ -78,6 +78,7 @@ public class FileService {
       boolean isDeleted = localStorage.delete(fileEntity.getFilePath(), fileEntity.getFileName());
       if(!isDeleted){
         log.info("파일이 로컬에서 삭제되지 않았습니다.");
+        System.out.println("파일이 로컬에서 삭제되지 않았습니다.");
       }
       return fileDto.getFilePath();
     } catch (IOException e) {

@@ -27,11 +27,9 @@ public class FileResizeService {
 
     BufferedImage croppedImage = originalImage.getSubimage(x,y,cropSize,cropSize);
 
-    // 4. 리사이즈 실행
     BufferedImage resizedImage = new BufferedImage(PROFILE_SIZE, PROFILE_SIZE, BufferedImage.TYPE_INT_RGB);
     Graphics2D graphics2D = resizedImage.createGraphics();
 
-    // 고품질 렌더링 설정
     graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -39,7 +37,6 @@ public class FileResizeService {
     graphics2D.drawImage(croppedImage, 0, 0, PROFILE_SIZE, PROFILE_SIZE, null);
     graphics2D.dispose();
 
-    // 5. byte[]로 변환
     try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
       ImageIO.write(resizedImage, formatName, outputStream);
       return outputStream.toByteArray();

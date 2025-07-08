@@ -53,7 +53,7 @@ public class ImageValidator implements Validator {
           .anyMatch(entry -> matchesAnySignature(fileBytes, entry.getValue()));
 
       if (!isValidImage) {
-        throw new RuntimeException("유효하지 않은 이미지 파일입니다.");
+        throw new RuntimeException("유효하지 않은 이미지 파일입니다. - 시그니처 불일치");
       }
 
     } catch (IOException e) {
