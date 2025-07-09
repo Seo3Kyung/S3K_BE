@@ -26,14 +26,23 @@ public class Member {
   // 서비스 회원 닉네임
   private String nickname;
 
+  // 성별
+  private String gender;
+
+  // 주된 산책 지역
+  private String address;
+
   // 이용 약관
   private boolean tos;
 
   // 개인정보 수집 및 이용 동의
   private boolean privacyPolicy;
 
-  // 개인정보 수집 및 이용 동의일자
-  private LocalDateTime agreeAt;
+  // 워키 수집 및 이용 동의
+  private boolean thirdPartyPolicy;
+
+  // 위치 기반 정보 이용 동의
+  private boolean locationPolicy;
 
   // 서비스 회원 권한
   private int role;
@@ -41,20 +50,23 @@ public class Member {
   // 서비스 회원 상태
   private int status;
 
+  // 프로필 이미지 아이디
+  private long profileImageId;
+
+  // 연령을 알기 위한 생일년도
+  private Integer birthYear;
+
+  // 개인정보 수집 및 이용 동의일자
+  private LocalDateTime agreeAt;
+
   // 서비스 회원 정보 생성 일자(가입)
   private LocalDateTime createdAt;
 
   // 서비스 회원 정보 수정 일자
   private LocalDateTime updatedAt;
 
-  // 성별
-  private String gender;
-
-  // 연령을 알기 위한 생일년도
-  private Integer birthYear;
-
-  // 주된 산책 지역
-  private String address;
+  // 서비스 회원 탈퇴 일자
+  private LocalDateTime deletedAt;
 
   public static Member createPendingMember(String snsId, Sns sns) {
     return Member.builder()
