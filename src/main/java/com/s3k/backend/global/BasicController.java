@@ -1,5 +1,6 @@
 package com.s3k.backend.global;
 
+import com.s3k.backend.global.address.service.AddressService;
 import com.s3k.backend.global.dto.ApisResponse;
 import com.s3k.backend.global.dto.address.GetNearbyRequest;
 import com.s3k.backend.global.dto.address.GetNearbyResponse;
@@ -14,8 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/basic")
+@RequestMapping("/api/basic")
 public class BasicController {
+
+  private final AddressService addressService;
+
+  public BasicController(AddressService addressService) {
+    this.addressService = addressService;
+  }
 
   @GetMapping("/health-check")
   public ApisResponse<?> healthCheck(){
@@ -41,20 +48,7 @@ public class BasicController {
   public ApisResponse<GetNearbyResponse> GetNearby(
       @RequestBody GetNearbyRequest request
   ) {
-    return ApisResponse.ok(new GetNearbyResponse(List.of(
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동",
-        "경기도 시흥시 은행동"
-    )));
+    List<String> results = addressService.getAddress(request);
+    return ApisResponse.ok(new GetNearbyResponse(results));
   }
 }
