@@ -83,6 +83,12 @@
     )
   </insert>
 
+  <update id="updatePendingMemberProfile">
+    UPDATE MEMBER
+    SET profile_image_id  = #{fileId}
+    WHERE sns_id = #{snsId}
+  </update>
+
   <select id="getMemberDetail" resultType="com.s3k.backend.member.entity.Member">
     SELECT
     id,
@@ -105,16 +111,20 @@
       sns_id,
       sns,
       nickname,
+      gender,
+      address,
       tos,
       privacy_policy,
-      agree_at,
+      third_party_policy,
+      location_policy,
       role,
       status,
+      profile_image_id,
+      birth_year,
+      agree_at,
       created_at,
       updated_at,
-      gender,
-      birth_year,
-      address
+      deleted_at
     FROM member
     WHERE sns_id = #{snsId}
   </select>
