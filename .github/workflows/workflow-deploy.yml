@@ -87,11 +87,20 @@ jobs:
           key: ${{secrets.EC2_PRIVATE_KEY}}
           port: ${{secrets.EC2_PORT || 22}}
           script: |
+            sudo mkdir -p /var/lib/uploads
+            sudo chown -R 1000:1000 /var/lib/uploads
             docker pull ${{secrets.DOCKERHUB_USERNAME}}/s3k-dev:latest
-            docker stop ${{secrets.EC2_CONTAINER_NAME}}
-            docker rm ${{secrets.EC2_CONTAINER_NAME}}
-            docker run -d --name ${{secrets.EC2_CONTAINER_NAME}} -p ${{secrets.EC2_PORT_FORWARDING}} -e SPRING_PROFILES_ACTIVE=dev ${{secrets.DOCKERHUB_USERNAME}}/s3k-dev:latest
+            docker compose down
+            docker compose up -d
             docker image prune -af
+#          script: |
+#            docker pull ${{secrets.DOCKERHUB_USERNAME}}/s3k-dev:latest
+#            docker stop ${{secrets.EC2_CONTAINER_NAME}}
+#            docker rm ${{secrets.EC2_CONTAINER_NAME}}
+#            docker run -d --name ${{secrets.EC2_CONTAINER_NAME}} \
+#            -p ${{secrets.EC2_PORT_FORWARDING}} \
+#            -e SPRING_PROFILES_ACTIVE=dev ${{secrets.DOCKERHUB_USERNAME}}/s3k-dev:latest
+#            docker image prune -af
 
       - name: Notify Discord on deploy failure
         uses: appleboy/discord-action@v1.2.0
