@@ -1,0 +1,15 @@
+# cleanup-artifacts.yml
+name: Cleanup Old Artifacts
+
+on:
+  schedule:
+    - cron: '0 2 * * 0'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: test-report
