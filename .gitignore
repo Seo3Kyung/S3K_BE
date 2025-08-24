@@ -39,3 +39,5 @@ out/
 ### ignore file ###
 application-secret.yml
 application-local.yml
+
+uploads
