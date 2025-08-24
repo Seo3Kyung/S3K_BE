@@ -13,5 +13,5 @@ public class FileEntity {
   private String fileExtension;
   private String filePath;
   private Long fileSize;
-  private Integer status;
+  private Integer fileStatus;
 }
