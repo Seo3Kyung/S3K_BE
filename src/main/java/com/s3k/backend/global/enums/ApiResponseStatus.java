@@ -16,7 +16,13 @@ public enum ApiResponseStatus {
   INTERNAL_ERROR("500", "서버 오류"),
 
   // 상세 에러메시지
-  MEMBER_VALIDATION("V01", "회원가입 유효성 검증 실패");
+  MEMBER_VALIDATION("V01", "회원가입 유효성 검증 실패"),
+
+  // 경유지 에러메시지
+  STOPOVER_NOT_FOUND("S1", "경유지 정보를 찾을 수 없습니다.")
+
+  ;
+
   private final String code;
   private final String desc;
 }

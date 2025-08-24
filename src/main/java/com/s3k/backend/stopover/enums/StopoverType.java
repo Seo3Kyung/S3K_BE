@@ -1,4 +1,4 @@
-package com.s3k.backend.stopover;
+package com.s3k.backend.stopover.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public enum StopoverType {
   private final int value;
   private final String desc;
 
-  public static StopoverType fromValue( int value ) {
+  public static StopoverType fromValue( Integer value ) {
     for( StopoverType stopoverType : values() ) {
       if( stopoverType.value == value ) return stopoverType;
     }
