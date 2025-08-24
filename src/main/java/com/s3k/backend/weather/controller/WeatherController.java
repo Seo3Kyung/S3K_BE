@@ -1,7 +1,7 @@
 package com.s3k.backend.weather.controller;
 
 import com.s3k.backend.global.dto.ApisResponse;
-import com.s3k.backend.weather.dto.WeatherListDto;
+import com.s3k.backend.weather.dto.WeatherDto;
 import com.s3k.backend.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class WeatherController {
   private final WeatherService weatherService;
 
   @GetMapping()
-  public ApisResponse<WeatherListDto> getWeather(
+  public ApisResponse<WeatherDto.Response> getWeather(
       @RequestParam int nx,
       @RequestParam int ny
   ) {
