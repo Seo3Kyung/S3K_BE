@@ -3,7 +3,6 @@ package com.s3k.backend.weather;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.s3k.backend.weather.api_client.kma.entity.Item;
-import com.s3k.backend.weather.dto.WeatherListDto;
 import com.s3k.backend.weather.entity.Weather;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
