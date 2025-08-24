@@ -17,7 +17,7 @@ public class FileDto {
   private final String fileExtension;
   private String filePath; // temp -> 경로, upload -> url
   private final Long fileSize;
-  private Integer status; // temp, upload, delete
+  private Integer fileStatus; // temp, upload, delete
   private LocalDateTime createDatetime;
   private LocalDateTime updateDatetime;
   private LocalDateTime deleteDatetime;
@@ -38,7 +38,7 @@ public class FileDto {
     this.fileExtension = fileExtension;
     this.filePath = filePath;
     this.fileSize = fileSize;
-    this.status = status;
+    this.fileStatus = status;
     if (Objects.equals(status, FileStatus.TEMP.getValue())){
       this.createDatetime = LocalDateTime.now();
     } else if (Objects.equals(status, FileStatus.UPLOAD.getValue())){
@@ -78,7 +78,7 @@ public class FileDto {
   }
 
   public void updateDeleteInfo(){
-    this.status = FileStatus.DELETE.getValue();
+    this.fileStatus = FileStatus.DELETE.getValue();
     this.deleteDatetime = LocalDateTime.now();
   }
 }

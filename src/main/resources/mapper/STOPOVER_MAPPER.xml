@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.s3k.backend.stopover.mapper.StopoverMapper">
+  <resultMap id="StopoverResultMap" type="com.s3k.backend.stopover.dto.query.GetStopoverRtn">
+    <id property="stopoverId" column="id"/>
+    <result property="walkingPathId" column="walking_path_id"/>
+    <result property="address" column="address"/>
+    <result property="comment" column="stopover_comment"/>
+    <result property="typeValue" column="stopover_category"/>
+    <result property="createDatetime" column="create_datetime"/>
+    <collection property="imageIds" ofType="java.lang.Long">
+      <result column="file_id"/>
+    </collection>
+  </resultMap>
+
+  <insert id="insertStopover" useGeneratedKeys="true" keyProperty="stopoverId" keyColumn="id">
+    INSERT INTO stopover (walking_path_id,address,stopover_comment,stopover_category,create_datetime)
+    VALUES (
+            #{walkingPathId},
+            #{address},
+            #{comment},
+            #{typeValue},
+            #{createDatetime}
+            )
+  </insert>
+
+  <insert id="insertStopoverFile">
+    INSERT INTO stopover_file (file_id, stopover_id, is_representative)
+    VALUES
+        <foreach collection="insertDtoList" item="dto" separator=",">
+          (
+            #{dto.imageId},
+            #{dto.stopoverId},
+            #{dto.isRepresentative}
+          )
+        </foreach>
+  </insert>
+
+  <select id="getStopover" resultMap="StopoverResultMap">
+    SELECT
+        s.id,
+        s.walking_path_id,
+        s.stopover_comment,
+        s.stopover_category,
+        s.address,
+        sf.file_id,
+        s.create_datetime
+    FROM stopover s
+        LEFT JOIN stopover_file sf ON s.id = sf.stopover_id
+    WHERE s.id = #{stopoverId}
+    ORDER BY sf.is_representative DESC
+  </select>
+
+  <select id="getStopovers" resultMap="StopoverResultMap">
+    SELECT
+      s.id,
+      s.walking_path_id,
+      s.stopover_comment,
+      s.stopover_category,
+      s.address,
+      sf.file_id,
+      s.create_datetime
+    FROM stopover s
+           LEFT JOIN stopover_file sf ON s.id = sf.stopover_id
+    WHERE is_deleted = false AND s.walking_path_id = #{walkingPathId}
+  </select>
+
+  <update id="updateStopover">
+    UPDATE stopover
+    SET
+        <if test="address != null">
+          address = #{address},
+        </if>
+        <if test="comment != null">
+          stopover_comment = #{comment},
+        </if>
+        <if test="typeValue != null">
+          stopover_category = #{typeValue},
+        </if>
+        update_datetime = #{updateDatetime}
+    WHERE id = #{stopoverId}
+  </update>
+
+  <update id="deleteStopover">
+    UPDATE stopover
+    SET
+        is_deleted = true,
+        delete_datetime = #{deleteDatetime}
+    WHERE id = #{stopoverId}
+  </update>
+
+  <select id="getStopoverFiles" resultType="long">
+    SELECT
+        file_id
+    FROM stopover_file
+    WHERE stopover_id = #{stopoverId}
+  </select>
+</mapper>
