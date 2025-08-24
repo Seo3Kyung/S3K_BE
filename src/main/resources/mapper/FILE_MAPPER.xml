@@ -12,7 +12,7 @@
           file_extension,
           file_path,
           file_size,
-          status,
+          file_status,
           create_datetime
         )
     VALUES (
@@ -34,31 +34,49 @@
             file_path = #{filePath},
         </if>
         <if test="status != null">
-          status = #{status},
+          file_status = #{status},
         </if>
         update_datetime = #{updateDatetime}
-    WHERE file_id = #{fileId}
+    WHERE id = #{fileId}
   </update>
 
   <update id="deleteFile">
     UPDATE file
     SET
-        status = #{status},
+        file_status = #{status},
         delete_datetime = #{deleteDatetime}
-    WHERE file_id = #{fileId}
+    WHERE id = #{fileId}
   </update>
 
   <select id="getFile" resultType="com.s3k.backend.file.entity.FileEntity">
     SELECT
-      file_id,
+      id AS file_id,
       file_name,
       file_type,
       file_content_type,
       file_extension,
       file_path,
       file_size,
-      status
+      file_status
     FROM file
-    WHERE file_id = #{fileId}
+    WHERE id = #{fileId}
+  </select>
+
+  <select id="getFiles" resultType="com.s3k.backend.file.entity.FileEntity">
+    SELECT
+      id AS file_id,
+      file_name,
+      file_type,
+      file_content_type,
+      file_extension,
+      file_path,
+      file_size,
+      file_status
+    FROM file
+    WHERE id IN (
+        <foreach collection="fileIds" item="fileId" separator=",">
+          #{fileId}
+        </foreach>
+      )
   </select>
 </mapper>
