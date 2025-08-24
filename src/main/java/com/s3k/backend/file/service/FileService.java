@@ -59,6 +59,7 @@ public class FileService {
       fileMapper.saveFile(fileDto);
       memberMapper.updatePendingMemberProfile(snsId, fileDto.getFileId());
     } catch (IOException e) {
+      System.out.println("saveProfileForRegister : ");
       e.printStackTrace();
     }
   }
@@ -88,6 +89,7 @@ public class FileService {
       }
       return fileDto.getFilePath();
     } catch (IOException e) {
+      System.out.println("saveProfileForS3 : ");
       e.printStackTrace();
       return null;
     }
