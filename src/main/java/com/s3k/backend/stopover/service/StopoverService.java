@@ -1,5 +1,6 @@
 package com.s3k.backend.stopover.service;
 
+import com.s3k.backend.file.dto.query.DeleteFile;
 import com.s3k.backend.file.entity.FileEntity;
 import com.s3k.backend.file.enums.FileStatus;
 import com.s3k.backend.file.mapper.FileMapper;
@@ -64,6 +65,7 @@ public class StopoverService {
         .comment(request.comment())
         .typeValue(request.type().getValue())
         .imageIds(request.imageIds())
+        .updateDatetime(LocalDateTime.now())
         .build();
     stopoverMapper.updateStopover(updateDto);
 
@@ -81,7 +83,12 @@ public class StopoverService {
             .build()
     );
     stopoverMapper.getStopoverFiles(stopoverId).forEach(stopoverFile ->
-      fileMapper.deleteFile(stopoverFile, FileStatus.DELETE.getValue(), LocalDateTime.now())
+      fileMapper.deleteFile(
+          DeleteFile.builder()
+              .fileId(stopoverFile)
+              .fileStatus(FileStatus.DELETE.getValue())
+              .build()
+      )
     );
   }
 

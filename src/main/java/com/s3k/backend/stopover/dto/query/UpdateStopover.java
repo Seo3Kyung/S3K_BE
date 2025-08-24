@@ -1,5 +1,6 @@
 package com.s3k.backend.stopover.dto.query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,4 +13,5 @@ public class UpdateStopover {
   private String comment;
   private Integer typeValue;
   private List<Long> imageIds;
+  private LocalDateTime updateDatetime;
 }

@@ -64,7 +64,7 @@
       s.create_datetime
     FROM stopover s
            LEFT JOIN stopover_file sf ON s.id = sf.stopover_id
-    WHERE s.walking_path_id = #{walkingPathId}
+    WHERE is_deleted = false AND s.walking_path_id = #{walkingPathId}
   </select>
 
   <update id="updateStopover">
