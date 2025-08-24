@@ -3,10 +3,10 @@ spring:
   application:
     name: backend
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=s3k
+    url: jdbc:postgresql://localhost:5432/local
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: 159510
+    username: user
+    password:
   security:
     oauth2:
       client:
