@@ -2,6 +2,7 @@ package com.s3k.backend.file.service;
 
 import com.s3k.backend.file.adapter.FileData;
 import com.s3k.backend.file.dto.FileDto;
+import com.s3k.backend.file.dto.query.UpdateFile;
 import com.s3k.backend.file.entity.FileEntity;
 import com.s3k.backend.file.interfaces.FileStorageService;
 import com.s3k.backend.file.mapper.FileMapper;
@@ -10,6 +11,9 @@ import com.s3k.backend.global.util.DateTimeUtil;
 import com.s3k.backend.member.entity.Member;
 import com.s3k.backend.member.mapper.MemberMapper;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -70,10 +74,12 @@ public class FileService {
           .orElseThrow(() -> new RuntimeException("프로필 파일이 존재하지 않습니다."));
       FileDto fileDto = s3StorageAdapter.upload(fileData);
       fileMapper.updateFile(
-          fileEntity.getFileId(),
-          fileDto.getFilePath(),
-          fileDto.getStatus(),
-          fileDto.getUpdateDatetime()
+          UpdateFile.builder()
+              .fileId(fileDto.getFileId())
+              .filePath(fileDto.getFilePath())
+              .fileStatus(fileDto.getFileStatus())
+              .updateDatetime(fileDto.getUpdateDatetime())
+              .build()
       );
       boolean isDeleted = localStorage.delete(fileEntity.getFilePath(), fileEntity.getFileName());
       if(!isDeleted){
@@ -91,5 +97,50 @@ public class FileService {
 //    Member member = memberMapper.getMemberDetailBySnsId(snsId);
 //    fileMapper.getFile()
 //    memberMapper.updatePendingMemberProfile(snsId, key);
+  }
+
+  @Transactional
+  public void saveImagesForS3(
+      List<Long> imageIds
+  ) {
+    List<FileEntity> files = fileMapper.getFiles(imageIds).orElse(Collections.emptyList());
+    if(files.isEmpty()) return;
+
+    List<FileData> fileDataList = files.stream()
+        .map(file -> {
+          try {
+            return localStorage.download(file.getFilePath(), file.getFileName())
+                .orElse(null);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        }).filter(Objects::nonNull).toList();
+    fileDataList.forEach(fileData -> {
+      try {
+        FileDto fileDto = s3StorageAdapter.upload(fileData);
+        fileMapper.updateFile(
+            UpdateFile.builder()
+                .fileId(fileDto.getFileId())
+                .filePath(fileDto.getFilePath())
+                .fileStatus(fileDto.getFileStatus())
+                .updateDatetime(fileDto.getUpdateDatetime())
+                .build()
+        );
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
+    files.forEach(file -> {
+      boolean isDeleted = false;
+      try {
+        isDeleted = localStorage.delete(file.getFilePath(), file.getFileName());
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      if(!isDeleted){
+        log.info("파일이 로컬에서 삭제되지 않았습니다.");
+        System.out.println("파일이 로컬에서 삭제되지 않았습니다.");
+      }
+    });
   }
 }
