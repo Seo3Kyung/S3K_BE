@@ -18,9 +18,8 @@ public class WeatherController {
 
   @GetMapping()
   public ApisResponse<WeatherDto.Response> getWeather(
-      @RequestParam int nx,
-      @RequestParam int ny
+      @RequestParam String locationKeyword
   ) {
-    return ApisResponse.ok(weatherService.getWeather(nx, ny));
+    return ApisResponse.ok(weatherService.getWeather(locationKeyword));
   }
 }
