@@ -66,6 +66,12 @@ jwt:
   secret:
     key: { jwt.secret.key }
 
+weather:
+  provider: kma
+  kma:
+    serviceKey: {weather.kma.serviceKey}
+    url: "apis.data.go.kr/1360000"
+
 springdoc:
   swagger-ui:
     path: /api/swagger
