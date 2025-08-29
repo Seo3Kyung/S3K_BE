@@ -1,8 +1,8 @@
 package com.s3k.backend.weather.api_client;
 
-import com.s3k.backend.weather.api_client.kma.entity.KmaFeignResponse;
+import com.s3k.backend.weather.api_client.kma.entity.Items;
 
 public interface WeatherClient {
 
-  KmaFeignResponse getCurrentWeather(int nx, int ny);
+  Items getCurrentWeather(int nx, int ny);
 }
