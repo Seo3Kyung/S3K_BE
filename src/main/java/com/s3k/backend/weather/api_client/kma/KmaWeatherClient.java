@@ -3,6 +3,7 @@ package com.s3k.backend.weather.api_client.kma;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.s3k.backend.weather.api_client.WeatherClient;
 import com.s3k.backend.weather.api_client.WeatherFeign;
+import com.s3k.backend.weather.api_client.kma.entity.Items;
 import com.s3k.backend.weather.api_client.kma.entity.KmaFeignResponse;
 import com.s3k.backend.weather.entity.WeatherDateTime;
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ public class KmaWeatherClient implements WeatherClient {
   private final WeatherFeign weatherFeign;
   private final KmaRequestTimeCalculator kmaRequestTimeCalculator;
 
-  public KmaFeignResponse getCurrentWeather(int nx, int ny) {
+  public Items getCurrentWeather(int nx, int ny) {
     // 검색할 시간 탐색
     WeatherDateTime searchWeatherDateTime = kmaRequestTimeCalculator.calculateKmaRequestTime(
         LocalDateTime.now());
@@ -37,6 +38,9 @@ public class KmaWeatherClient implements WeatherClient {
         searchWeatherDateTime.getTime(), nx, ny
     );
 
-    return objectMapper.convertValue(kmaFeignResponseData.get("response"), KmaFeignResponse.class);
+    KmaFeignResponse response = objectMapper.convertValue(kmaFeignResponseData.get("response"),
+        KmaFeignResponse.class);
+
+    return response.getItems();
   }
 }
