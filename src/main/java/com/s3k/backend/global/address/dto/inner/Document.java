@@ -7,10 +7,13 @@ import lombok.Data;
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Document {
+
   private Address address;
   private RoadAddress roadAddress;
   private String id;
   private String addressName;
   private String roadAddressName;
   private String distance;
+  private String x;
+  private String y;
 }
