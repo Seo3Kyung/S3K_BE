@@ -1,15 +1,16 @@
 package com.s3k.backend.home.entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class Stopover {
 
   private Long id;
-  private String title;
-  private String comment;
+  private Long walkingPathId;
+  private String stopoverComment;
+  private Integer stopoverCategory;
   private String address;
 
 }

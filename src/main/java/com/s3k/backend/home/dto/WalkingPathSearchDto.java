@@ -2,7 +2,7 @@ package com.s3k.backend.home.dto;
 
 import java.util.List;
 
-public class CourseSearchDto {
+public class WalkingPathSearchDto {
 
   public record Request(
       String startLocation,

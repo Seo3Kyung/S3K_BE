@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.s3k.backend.home.mapper.WalkingPathMapper">
+
+  <select id="existsByWalkingPathId" resultType="boolean">
+    SELECT EXISTS(
+        SELECT 1
+        FROM walking_path
+        where id = #{walkingPathId}
+    )
+  </select>
+
+  <select id="findWalkingPathById" resultType="com.s3k.backend.home.entity.WalkingPath">
+    SELECT
+        id
+        , walking_path_title        AS walkingPathTitle
+        , image_exposure            AS imageExposure
+        , walking_path_start        AS walkingPathStart
+        , walking_path_end          AS walkingPathEnd
+        , walking_total_time        AS walkingTotalTime
+        , walking_count             AS walkingCount
+        , walking_distance          AS walkingDistance
+        , walking_kcal              AS walkingKcal
+        , rest_time                 AS restTime
+        , walking_path_start_name   AS walkingPathStartName
+        , walking_path_end_name     AS walkingPathEndName
+        , create_datetime           AS createDatetime
+        , update_datetime           AS updateDatetime
+        , delete_datetime           AS deleteDatetime
+        , is_deleted                AS isDelete
+    FROM walking_path
+    where id = #{walkingPathId}
+  </select>
+</mapper>

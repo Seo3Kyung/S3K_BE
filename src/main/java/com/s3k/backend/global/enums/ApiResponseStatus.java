@@ -17,6 +17,7 @@ public enum ApiResponseStatus {
 
   // 상세 에러메시지
   MEMBER_VALIDATION("V01", "회원가입 유효성 검증 실패"),
+  NOT_FOUND_WALKING_PATH("V02", "존재하지 않는 산책로입니다"),
 
   // 경유지 에러메시지
   STOPOVER_NOT_FOUND("S1", "경유지 정보를 찾을 수 없습니다.")
