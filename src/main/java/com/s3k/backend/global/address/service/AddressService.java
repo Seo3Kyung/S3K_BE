@@ -1,11 +1,14 @@
 package com.s3k.backend.global.address.service;
 
+import static com.s3k.backend.global.enums.ApiResponseStatus.BAD_REQUEST;
+
 import com.s3k.backend.global.address.dto.AddressInfo;
 import com.s3k.backend.global.address.dto.KakaoAddressDto;
 import com.s3k.backend.global.address.dto.inner.Address;
 import com.s3k.backend.global.address.dto.inner.Document;
 import com.s3k.backend.global.address.feign.KakaoFeign;
 import com.s3k.backend.global.dto.address.GetNearbyRequest;
+import com.s3k.backend.global.error.WalkiException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -32,6 +35,10 @@ public class AddressService {
         request.getLongitude(),
         request.getLatitude()
     );
+
+    if(dto1 == null || dto1.getMeta() == null || dto1.getDocuments() == null) {
+      throw new WalkiException(BAD_REQUEST);
+    }
 
     String keyword = Arrays.stream(dto1.getDocuments())
         .map(x -> x.getAddress().getRegion1depthName() + " " +  x.getAddress().getRegion2depthName())
