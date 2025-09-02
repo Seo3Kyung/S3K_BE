@@ -51,7 +51,7 @@ public class ControllerLoggingAspect {
     long start = System.nanoTime();
     try {
       Object result = joinPoint.proceed();
-      responseLog(result, start);
+      responseLog(start);
       return result;
     } catch (Exception ex) {
       log.error(ex.getMessage());
@@ -71,12 +71,11 @@ public class ControllerLoggingAspect {
     log.info("{} UserId : {}", REQUEST_PREFIX, username);
   }
 
-  private void responseLog(Object result, long start) {
+  private void responseLog(long start) {
     long elapsedMs = Duration.ofNanos(System.nanoTime() - start).toMillis();
     String elapsed = String.format("%.2f", elapsedMs / 1000.0);
 
     log.info("{} 실행 소요 시간: {}초", RESPONSE_PREFIX, elapsed);
-    log.info("{} Response Data : {}", RESPONSE_PREFIX, result);
   }
 
   private String serializeArgs(Object[] args) {
