@@ -18,11 +18,7 @@ public interface MemberMapper {
 
   void updateActiveMember(Member activeMember);
 
-  void createMember(Member parameter);
-
   void updatePendingMemberProfile(@Param("snsId") String snsId, @Param("fileId") Long fileId);
-
-  Member getMemberDetail(Long memberId);
 
   Member getMemberDetailBySnsId(String snsId);
 }

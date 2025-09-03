@@ -6,104 +6,73 @@
 
   <select id="existsMemberBySnsId" resultType="boolean">
     SELECT count(*) > 0
-    FROM MEMBER
+    FROM member
     WHERE sns_id = #{snsId}
   </select>
 
   <select id="existsByNickname" resultType="boolean">
     SELECT COUNT(*) > 0
-    FROM MEMBER
+    FROM member
     WHERE nickname = #{nickname}
   </select>
 
   <insert id="insertPendingMember" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO MEMBER
-    (
-      sns_id,
-      sns,
-      role,
-      status
-    )
-    VALUES
-    (
-      #{snsId},
-      #{sns},
-      #{role},
-      #{status}
-    )
-  </insert>
-
-  <update id="updatePendingMemberNickname">
-    UPDATE MEMBER
-    SET nickname = #{nickname}
-    WHERE sns_id = #{snsId}
-  </update>
-
-  <update id="updateActiveMember" >
-    UPDATE MEMBER
-    SET
-        nickname = #{nickname},
-        gender = #{gender},
-        birth_year = #{birthYear},
-        address = #{address},
-        tos = #{tos},
-        privacy_policy = #{privacyPolicy},
-        role = #{role},
-        status = #{status}
-    WHERE   id = #{id}
-        AND sns_id = #{snsId}
-  </update>
-
-  <insert id="createMember" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO member
     (
       sns_id,
       sns,
-      nickname,
-      tos,
-      privacy_policy,
-      agree_at,
       role,
       status,
-      created_at,
-      updated_at
+      create_datetime
     )
     VALUES
     (
       #{snsId},
       #{sns},
-      #{nickname},
-      #{tos},
-      #{privacyPolicy},
-      #{agreeAt},
       #{role},
       #{status},
-      #{createdAt},
-      #{updatedAt}
+      NOW()
     )
   </insert>
 
-  <update id="updatePendingMemberProfile">
-    UPDATE MEMBER
-    SET profile_image_id  = #{fileId}
-    WHERE sns_id = #{snsId}
+  <update id="updatePendingMemberNickname">
+    UPDATE
+        member
+    SET
+        nickname = #{nickname},
+        update_datetime = NOW()
+    WHERE
+        sns_id = #{snsId}
   </update>
 
-  <select id="getMemberDetail" resultType="com.s3k.backend.member.entity.Member">
-    SELECT
-    id,
-    sns_id,
-    sns,
-    nickname,
-    tos,
-    privacy_policy,
-    agree_at,
-    role,
-    status,
-    created_at,
-    updated_at
-    FROM member WHERE id = #{memberId}
-  </select>
+  <update id="updateActiveMember" >
+    UPDATE
+        member
+    SET
+        nickname = #{nickname},
+        gender = #{gender},
+        address = #{address},
+        birth_year = #{birthYear},
+        role = #{role},
+        status = #{status},
+        tos = #{tos},
+        privacy_policy = #{privacyPolicy},
+        privacy_policy_agree_at = NOW(),
+        third_party_policy = #{thirdPartyPolicy},
+        location_policy = #{locationPolicy},
+        update_datetime = NOW()
+    WHERE   id = #{id}
+        AND sns_id = #{snsId}
+  </update>
+
+  <update id="updatePendingMemberProfile">
+    UPDATE
+        member
+    SET
+        profile_image_id  = #{fileId}
+    WHERE
+        sns_id = #{snsId}
+  </update>
 
   <select id="getMemberDetailBySnsId" resultType="com.s3k.backend.member.entity.Member">
     SELECT
@@ -113,18 +82,18 @@
       nickname,
       gender,
       address,
-      tos,
-      privacy_policy,
-      third_party_policy,
-      location_policy,
+      birth_year,
+      profile_image_id,
       role,
       status,
-      profile_image_id,
-      birth_year,
-      agree_at,
-      created_at,
-      updated_at,
-      deleted_at
+      tos,
+      privacy_policy,
+      privacy_policy_agree_at,
+      third_party_policy,
+      location_policy,
+      create_datetime,
+      update_datetime,
+      delete_datetime
     FROM member
     WHERE sns_id = #{snsId}
   </select>
