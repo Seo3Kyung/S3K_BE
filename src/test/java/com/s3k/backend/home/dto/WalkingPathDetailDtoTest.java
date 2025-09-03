@@ -38,7 +38,8 @@ class WalkingPathDetailDtoTest {
 
     // when
     WalkingPathDetailDto.Response response =
-        WalkingPathDetailDto.Response.fromWalkingPathAndStopoverEntity(walkingPath, stopoverList);
+        WalkingPathDetailDto.Response.fromWalkingPathAndStopoverEntity(walkingPath, stopoverList,
+            null);
 
     // then
     assertThat(response).isNotNull();
@@ -69,7 +70,7 @@ class WalkingPathDetailDtoTest {
     // when
     WalkingPathDetailDto.Response response =
         WalkingPathDetailDto.Response.fromWalkingPathAndStopoverEntity(walkingPath,
-            emptyStopoverList);
+            emptyStopoverList, null);
 
     // then
     assertThat(response).isNotNull();

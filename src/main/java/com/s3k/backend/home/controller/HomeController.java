@@ -4,6 +4,7 @@ import com.s3k.backend.global.dto.ApisResponse;
 import com.s3k.backend.home.dto.CourseSummaryDto;
 import com.s3k.backend.home.dto.NearByCoursesDto;
 import com.s3k.backend.home.dto.RecentCoursesDto;
+import com.s3k.backend.home.dto.StopoverDto;
 import com.s3k.backend.home.dto.WalkingPathDetailDto;
 import com.s3k.backend.home.dto.WalkingPathSearchDto;
 import com.s3k.backend.home.dto.WaypointDto;
@@ -222,25 +223,25 @@ public class HomeController {
   @GetMapping("/{walkingPathId}")
   public ApisResponse<WalkingPathDetailDto.Response> getCourseDetail(
       @PathVariable Long walkingPathId) {
-    return ApisResponse.ok(homeService.findCourseDetail(walkingPathId));
-//    return ApisResponse.ok(
-//        new CourseDetailDto.Response(
-//            "북촌 한옥마을 탐방 코스",
-//            true,
-//            "안국역",
-//            "창덕궁",
-//            3200L,
-//            4,
-//            80L,
-//            List.of("전통", "역사", "문화"),
-//            List.of(
-//                new Stopover(1L, "북촌 한옥마을 입구", "전통 한옥이 줄지어 있는 골목 시작점", ""),
-//                new Stopover(2L, "가회동 31번지", "사진 명소로 유명한 포토스팟", "서울 종로구 가회동 31"),
-//                new Stopover(3L, "삼청동 카페거리", "걷다가 잠깐 쉬어가기 좋은 카페 밀집 지역", "서울 종로구 삼청로 일대"),
-//                new Stopover(4L, "창덕궁", "세계문화유산으로 지정된 궁궐", "서울 종로구 율곡로 99")
-//            )
-//        )
-//    );
+    //return ApisResponse.ok(homeService.findCourseDetail(walkingPathId));
+    return ApisResponse.ok(
+        new WalkingPathDetailDto.Response(
+            "",
+            "북촌 한옥마을 탐방 코스",
+            true,
+            "안국역",
+            "창덕궁",
+            3200L,
+            80L,
+            List.of("전통", "역사", "문화"),
+            List.of(
+                new StopoverDto.Response("북촌 한옥마을 입구", "한옥", ""),
+                new StopoverDto.Response("가회동 31번지", "가희동", "서울 종로구 가회동 31"),
+                new StopoverDto.Response("삼청동 카페거리", "걷다가 잠깐 쉬어가기 좋은 카페 밀집 지역", "서울 종로구 삼청로 일대"),
+                new StopoverDto.Response("창덕궁", "세계문화유산으로 지정된 궁궐", "서울 종로구 율곡로 99")
+            )
+        )
+    );
   }
 
   // 다른 유저가 등록한 경유지

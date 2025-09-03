@@ -9,6 +9,7 @@ public class WalkingPathDetailDto {
 
   @Builder
   public record Response(
+      String photoUrlPath,
       String title,
       boolean like,
       String startPointName,
@@ -20,10 +21,11 @@ public class WalkingPathDetailDto {
   ) {
 
     public static Response fromWalkingPathAndStopoverEntity(WalkingPath walkingPath,
-        List<Stopover> stopoverList) {
+        List<Stopover> stopoverList, String photoUrlPath) {
       List<StopoverDto.Response> stopoverResponseList = StopoverDto.Response.fromList(stopoverList);
 
       return Response.builder()
+          .photoUrlPath(photoUrlPath)
           .title(walkingPath.getWalkingPathTitle())
           .like(true)
           .startPointName(walkingPath.getWalkingPathStartName())
