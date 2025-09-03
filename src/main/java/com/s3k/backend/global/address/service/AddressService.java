@@ -32,8 +32,8 @@ public class AddressService {
   ) {
     KakaoAddressDto dto1 = kakaoFeign.getAddressByCoordinate(
         "KakaoAK " + kakaoClientId,
-        request.getLongitude(),
-        request.getLatitude()
+        request.getLongitude().toString(),
+        request.getLatitude().toString()
     );
 
     if(dto1 == null || dto1.getMeta() == null || dto1.getDocuments() == null) {
@@ -47,8 +47,8 @@ public class AddressService {
     KakaoAddressDto dto2 = kakaoFeign.getAddressByKeyword(
         "KakaoAK " + kakaoClientId,
         keyword,
-        request.getLongitude(),
-        request.getLatitude(),
+        request.getLongitude().toString(),
+        request.getLatitude().toString(),
         20000
     );
 
