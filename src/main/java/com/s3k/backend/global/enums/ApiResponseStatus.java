@@ -15,6 +15,9 @@ public enum ApiResponseStatus {
   METHOD_NOT_ALLOWED("405", "지원하지 않는 메소드"),
   INTERNAL_ERROR("500", "서버 오류"),
 
+  // 주소지 관련 에러 메시지
+  EMPTY_RESULT("A01", "해당 좌표에 대한 검색 결과가 없습니다."),
+
   // 상세 에러메시지
   MEMBER_VALIDATION("V01", "회원가입 유효성 검증 실패"),
 
