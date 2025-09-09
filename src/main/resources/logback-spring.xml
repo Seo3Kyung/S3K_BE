@@ -24,7 +24,7 @@
       <webhookUri>${DISCORD_WEBHOOK_URL}</webhookUri>
       <layout class="ch.qos.logback.classic.PatternLayout">
         <pattern>
-          ``` LEVEL  [%-5level]%n TIME   [%d{yyyy-MM-dd HH:mm:ss}]%n TRACE  [%thread]%n CLASS  [%logger{35}]%n =============== MESSAGE ===============%n %msg%n%ex{3}```
+          ``` LEVEL  [%-5level]%n TIME   [%d{yyyy-MM-dd HH:mm:ss}]%n TRACE  [%thread]%n CLASS  [%logger{35}]%n URL    [%replace(%msg){'\|.*',''}]%n =============== MESSAGE ===============%n %replace(%replace(%msg){'^[^|]*\|',''}){'\|[^|]*$',''}%n ================ DATA =================%n %replace(%msg){'.*\|',''}%n```
         </pattern>
       </layout>
       <username>에러 감지</username>

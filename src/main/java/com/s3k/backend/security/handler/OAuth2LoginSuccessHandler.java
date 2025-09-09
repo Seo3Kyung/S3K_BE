@@ -33,14 +33,17 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     String snsId = getSnsIdFromAuthentication(authentication);
 
-    // 신규 회원이 로그인하면 만료시간이 5분인 토큰
-    String redirectPath = SIGN_UP_PATH;
-    String accessToken = jwtTokenIssuer.createAccessToken(snsId, 5L, ChronoUnit.MINUTES);
+    String redirectPath;
+    String accessToken;
 
     if (isActiveUser(authentication)) {
       // 기존 회원이 로그인하면 만료시간이 6시간인 토큰
       redirectPath = HOME_PATH;
       accessToken = jwtTokenIssuer.createAccessToken(snsId, 6L, ChronoUnit.HOURS);
+    } else {
+      // 신규 회원이 로그인하면 만료시간이 5분인 토큰
+      redirectPath = SIGN_UP_PATH;
+      accessToken = jwtTokenIssuer.createAccessToken(snsId, 5L, ChronoUnit.MINUTES);
     }
 
     String redirectUrl = RedirectUrlUtils.resolveFrontUrl(request);

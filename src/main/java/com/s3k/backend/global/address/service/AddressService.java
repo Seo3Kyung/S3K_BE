@@ -1,6 +1,7 @@
 package com.s3k.backend.global.address.service;
 
 import static com.s3k.backend.global.enums.ApiResponseStatus.BAD_REQUEST;
+import static com.s3k.backend.global.enums.ApiResponseStatus.EMPTY_RESULT;
 
 import com.s3k.backend.global.address.dto.AddressInfo;
 import com.s3k.backend.global.address.dto.KakaoAddressDto;
@@ -30,15 +31,26 @@ public class AddressService {
   public List<String> getAddress(
       GetNearbyRequest request
   ) {
+    List<String> addressList = new ArrayList<>();
+
     KakaoAddressDto dto1 = kakaoFeign.getAddressByCoordinate(
         "KakaoAK " + kakaoClientId,
-        request.getLongitude(),
-        request.getLatitude()
+        request.getLongitude().toString(),
+        request.getLatitude().toString()
     );
-
-    if(dto1 == null || dto1.getMeta() == null || dto1.getDocuments() == null) {
-      throw new WalkiException(BAD_REQUEST);
+    if(dto1.checkNull()) {
+      throw new WalkiException(EMPTY_RESULT);
     }
+
+    Address address = Arrays.stream(dto1.getDocuments()).findFirst()
+        .orElseThrow(() -> new WalkiException(EMPTY_RESULT)).getAddress();
+
+    // 도명 시명 동명 형식으로 처리
+    addressList.add(
+        address.getRegion1depthName() + " "
+            + address.getRegion2depthName() + " "
+            + address.getRegion3depthName()
+    );
 
     String keyword = Arrays.stream(dto1.getDocuments())
         .map(x -> x.getAddress().getRegion1depthName() + " " +  x.getAddress().getRegion2depthName())
@@ -47,20 +59,20 @@ public class AddressService {
     KakaoAddressDto dto2 = kakaoFeign.getAddressByKeyword(
         "KakaoAK " + kakaoClientId,
         keyword,
-        request.getLongitude(),
-        request.getLatitude(),
+        request.getLongitude().toString(),
+        request.getLatitude().toString(),
         20000
     );
+    if(dto2.checkNull()) {
+      throw new WalkiException(EMPTY_RESULT);
+    }
 
-    List<String> addressList = new ArrayList<>();
-    Address address = Arrays.stream(dto1.getDocuments()).findFirst().get().getAddress();
-    addressList.add(address.getRegion1depthName() + " " + address.getRegion2depthName() + " "
-        + address.getRegion3depthName());
     addressList.addAll(Arrays.stream(dto2.getDocuments())
         .sorted(Comparator.comparing(Document::getDistance))
         .map(document ->
             document.getAddressName().substring(0, document.getAddressName().lastIndexOf("동") + 1)
         ).distinct().toList());
+
     return addressList;
   }
 }

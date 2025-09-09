@@ -25,8 +25,7 @@ public class OAuth2LoginFailureHandler implements AuthenticationFailureHandler {
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException exception) throws IOException, ServletException {
     String errorMessage = URLEncoder.encode(exception.getMessage(), StandardCharsets.UTF_8);
-    log.error(exception.getMessage(), exception);
-    log.error("OAuth2 로그인 실패, 원인 : {}", errorMessage);
+    log.error("{}|{}|{}", null, "OAuth2 로그인 실패", errorMessage);
 
     String redirectUrl = RedirectUrlUtils.resolveFrontUrl(request);
     response.sendRedirect(redirectUrl + LOGIN_PATH);

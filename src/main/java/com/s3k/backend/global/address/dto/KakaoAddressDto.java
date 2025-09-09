@@ -2,6 +2,7 @@ package com.s3k.backend.global.address.dto;
 
 import com.s3k.backend.global.address.dto.inner.Document;
 import com.s3k.backend.global.address.dto.inner.Meta;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,4 +11,12 @@ import lombok.Data;
 public class KakaoAddressDto {
   private Meta meta;
   private Document[] documents;
+
+  public Boolean checkNull(){
+    return
+        Objects.isNull(meta) ||
+            Objects.isNull(documents) ||
+            documents.length == 0
+        ;
+  }
 }

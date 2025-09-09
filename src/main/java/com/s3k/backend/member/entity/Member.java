@@ -32,17 +32,11 @@ public class Member {
   // 주된 산책 지역
   private String address;
 
-  // 이용 약관
-  private boolean tos;
+  // 연령을 알기 위한 생일년도
+  private int birthYear;
 
-  // 개인정보 수집 및 이용 동의
-  private boolean privacyPolicy;
-
-  // 워키 수집 및 이용 동의
-  private boolean thirdPartyPolicy;
-
-  // 위치 기반 정보 이용 동의
-  private boolean locationPolicy;
+  // 프로필 이미지 아이디
+  private long profileImageId;
 
   // 서비스 회원 권한
   private int role;
@@ -50,23 +44,29 @@ public class Member {
   // 서비스 회원 상태
   private int status;
 
-  // 프로필 이미지 아이디
-  private long profileImageId;
+  // 이용 약관
+  private boolean tos;
 
-  // 연령을 알기 위한 생일년도
-  private Integer birthYear;
+  // 개인정보 수집 및 이용 동의
+  private boolean privacyPolicy;
 
-  // 개인정보 수집 및 이용 동의일자
-  private LocalDateTime agreeAt;
+  // 개인정보 수집 및 이용 동의 날짜
+  private LocalDateTime privacyPolicyAgreeAt;
+
+  // 워키 수집 및 이용 동의
+  private boolean thirdPartyPolicy;
+
+  // 위치 기반 정보 이용 동의
+  private boolean locationPolicy;
 
   // 서비스 회원 정보 생성 일자(가입)
-  private LocalDateTime createdAt;
+  private LocalDateTime createDateTime;
 
   // 서비스 회원 정보 수정 일자
-  private LocalDateTime updatedAt;
+  private LocalDateTime updateDateTime;
 
   // 서비스 회원 탈퇴 일자
-  private LocalDateTime deletedAt;
+  private LocalDateTime deleteDateTime;
 
   public static Member createPendingMember(String snsId, Sns sns) {
     return Member.builder()
@@ -81,12 +81,14 @@ public class Member {
     return this.toBuilder()
         .nickname(dto.nickname())
         .gender(dto.gender())
-        .birthYear(dto.birthYear())
         .address(dto.address())
-        .tos(dto.tos())
-        .privacyPolicy(dto.privacyPolicy())
+        .birthYear(dto.birthYear())
         .role(Role.MEMBER.getValue())
         .status(Status.ACTIVE.getValue())
+        .tos(dto.tos())
+        .privacyPolicy(dto.privacyPolicy())
+        .thirdPartyPolicy(dto.thirdPartyPolicy())
+        .locationPolicy(dto.locationPolicy())
         .build();
   }
 }
