@@ -67,7 +67,7 @@
     WHERE is_deleted = false AND s.walking_path_id = #{walkingPathId}
   </select>
 
-  <update id="updateStopover">
+  <update id="updateStopover" useGeneratedKeys="true" keyProperty="stopoverId" keyColumn="id">
     UPDATE stopover
     SET
         <if test="address != null">

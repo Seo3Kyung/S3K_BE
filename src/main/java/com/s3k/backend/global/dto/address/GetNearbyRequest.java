@@ -1,12 +1,11 @@
 package com.s3k.backend.global.dto.address;
 
-import java.math.BigDecimal;
+import com.s3k.backend.global.dto.PositionDto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
-public class GetNearbyRequest {
-  private BigDecimal latitude;
-  private BigDecimal longitude;
+@EqualsAndHashCode(callSuper = true)
+public class GetNearbyRequest extends PositionDto {
 }
